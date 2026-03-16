@@ -149,18 +149,15 @@
         <div class="uk-width-medium-1-2">
             <div class="md-card">
                 <div class="md-card-content">
-                    <h4>Cooperative Summary</h4>
+                    <h4>Clan Summary</h4>
                     <div class="uk-overflow-container">
                         <table class="uk-table">
                             <thead>
                                 <tr>
-                                    <th class="uk-text-nowrap">Cooperative</th>
-                                    <th class="uk-text-nowrap">Agent</th>
+                                    <th class="uk-text-nowrap">Clan</th>
                                     <th class="uk-text-nowrap">Members</th>
                                     <th class="uk-text-nowrap uk-text-right">Male</th>
                                     <th class="uk-text-nowrap uk-text-right">Female</th>
-                                    <th class="uk-text-nowrap uk-text-right">Is Refugee</th>
-                                    <th class="uk-text-nowrap uk-text-right">Is Handicup</th>
                                     <th class="uk-text-nowrap uk-text-right">Youth</th>
                                 </tr>
                             </thead>
@@ -168,12 +165,9 @@
                                 {% for cs in coop_summary %}
                                 <tr class="uk-table-middle">
                                     <td class="uk-width-3-10 uk-text-nowrap"><a href="">{{ cs.name }}</a></td>
-                                    <td class="uk-width-2-10 uk-text-nowrap">{{ cs.agents_count|intcomma }}</td>
                                     <td class="uk-width-2-10 uk-text-nowrap">{{ cs.member_count|intcomma }}</td>
                                     <td class="uk-width-2-10 uk-text-nowrap">{{ cs.male_count|intcomma }}</td>
                                     <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">{{ cs.female_count|intcomma }}</td>
-                                    <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">{{ cs.refugee_count|intcomma }}</td>
-                                    <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">{{ cs.handicup_count|intcomma }}</td>
                                     <td class="uk-width-2-10 uk-text-right uk-text-muted uk-text-small">{{ cs.youth_count|intcomma }}</td>
                                 </tr>
                                 {% endfor %}
