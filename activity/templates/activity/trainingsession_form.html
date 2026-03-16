@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_custom_tags %}
+{% block style %}
+    <!-- additional styles for plugins -->
+    <!-- dropify -->
+    <link rel="stylesheet" href="{% static 'assets/skins/dropify/css/dropify.css' %}">
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        #id_common_animal_deseases{height: auto !important; min-height: 0px !important;}
+    </style>
+{% endblock %}
+{% block page_content %}
+<h3 class="heading_b uk-margin-bottom">Training Session</h3>
+   <div class="md-card">
+        <div class="md-card-content">
+            <form method="POST" class="new-event-form" role="role" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include "error_template.html" with form=form %}
+                 <div class="uk-grid" data-uk-grid-margin>
+                   
+                    {% for field in form %}
+                    {% if field.name == 'trainer' %}
+                    <div class="uk-width-medium-1-1" id="member_wrap">
+                        {% elif field.name == 'external_trainer' %}
+                        
+                    <div class="uk-width-medium-1-1" id="non_member">
+                        <a href="{% url 'activity:external_create'%}" style="padding: 50px;"><span class="menu_icon"><i class="fa fa-plus"></i></span> <span class=" class="menu_title">Add External Trainer </span></a>
+                    
+                    {% else %}
+                     <div class="uk-width-medium-1-1">
+                    {% endif %}
+                    {% include "form/field.html" with field=field input_group_add_on='<i class="uk-input-group-icon uk-icon-map-o"></i>' %}
+                    {% if field.name == 'trainer' %}
+                        {% endif %}
+                    </div>
+                     
+                     
+                    {% endfor %}
+                </div>
+                
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <button type="submit" class="md-btn md-btn-success">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <script src="{% static 'bower_components/parsleyjs/dist/parsley.min.js' %}"></script>
+    <!--<!-- jquery steps -->
+    <!--<script src="{% static 'assets/js/custom/wizard_steps.min.js' %}"></script>-->
+    <!---->
+    <!--<!--  forms wizard functions -->
+    <!--<script src="{% static 'assets/js/pages/forms_wizard.min.js' %}"></script>-->
+    
+    <script src="{% static 'bower_components/jquery.formset.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+     <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <script>
+         var is_member = $("#id_is_external").is(':checked');
+        console.log("Member Select "+is_member)
+        
+        if (is_member) {
+            $("#member_wrap").hide();
+            $("#non_member").show();
+            
+        }else{
+            $("#member_wrap").show();
+            $("#non_member").hide();
+            
+        }
+        
+    
+        $("#id_is_external").on('ifChecked', function(){
+             $("#member_wrap").hide();
+            $("#non_member").show();
+           
+        });
+            
+        $('#id_is_external').on('ifUnchecked', function () {
+           $("#member_wrap").show()
+            $("#non_member").hide()
+           
+        })
+        UIkit.datepicker("#id_training_start", {maxDate:get_current_date(), format:'YYYY-MM-DD HH:MM:SS' });
+        
+        $("#id_training_start").attr("autocomplete", "off");
+        var total_price = $("#id_training_start")
+        var unit_price = $("#id_training_start")
+        
+        
+        UIkit.datepicker("#id_training_end", {maxDate:get_current_date(), format:'YYYY-MM-DD  HH:MM:SS' });
+        
+        $("#id_training_start").attr("autocomplete", "off");
+        var total_price = $("#id_training_end")
+        var unit_price = $("#id_training_end")
+        
+        function get_current_date(){
+            var fullDate = new Date()
+            console.log(fullDate);
+            //Thu May 19 2011 17:25:38 GMT+1000 {}
+             
+            //convert month to 2 digits
+            var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : '0' + (fullDate.getMonth()+1);
+             
+            var currentDate = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + (fullDate.getDate()+1);
+            console.log(currentDate);
+            return currentDate;
+         }
+        
+        $("#selec_adv_1").selectize({plugins:{remove_button:{label:""}},maxItems:null,valueField:"id",labelField:"title",searchField:"title",create:!1,render:{option:function(t,e){return'<div class="option"><span class="title">'+e(t.title)+"</span></div>"},item:function(t,e){return'<div class="item"><a href="'+e(t.url)+'" target="_blank">'+e(t.title)+"</a></div>"}},onDropdownOpen:function(t){t.hide().velocity("slideDown",{begin:function(){t.css({"margin-top":"0"})},duration:200,easing:easing_swiftOut})},onDropdownClose:function(t){t.show().velocity("slideUp",{complete:function(){t.css({"margin-top":""})},duration:200,easing:easing_swiftOut})}});
+        
+        
+       
+        
+    </script>
+{% endblock %}

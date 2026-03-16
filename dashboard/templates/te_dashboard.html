@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'bower_components/c3js-chart/c3.min.css' %}" media="all">
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="uk-grid uk-grid-width-large-1-1 uk-grid-width-medium-1-2 uk-grid-medium " >
+    <div class="uk-width-medium-1-1">
+        <div class="md-card">
+            <div class="md-card-content">
+                <h4 class="heading_c uk-margin-bottom">Total Profiles</h4>
+                    <div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler " data-uk-sortable data-uk-grid-margin>
+
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                                <span class="uk-text-muted uk-text-small">Registered</span>
+                                <h2 class="uk-margin-remove">{{ total_members }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                                <span class="uk-text-muted uk-text-small">Cards Issued</span>
+                                <h2 class="uk-margin-remove">{{ total_carded }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                        <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                                <span class="uk-text-muted uk-text-small">With NIN</span>
+                                <h2 class="uk-margin-remove">{{ total_nin }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                        <div>
+                        <div class="md-card">
+                            <div class="md-card-content">
+                                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                                <span class="uk-text-muted uk-text-small">With Wallet</span>
+                                <h2 class="uk-margin-remove">{{ total_wallet }}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="uk-grid uk-grid-width-large-1-1 uk-grid-width-medium-1-2 uk-grid-medium " >
+    <div class="uk-width-medium-1-1">
+        <div class="md-card">
+            <div class="md-card-content">
+                <h4 class="heading_c uk-margin-bottom">TE Statistics Bars Chart</h4>
+                <div id="c3_chart_bar_stacked" class="c3chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="uk-grid uk-grid-width-large-1-1 uk-grid-width-medium-1-2 uk-grid-medium " >
+    <div class="uk-width-medium-1-1">
+        <div class="md-card">
+            <div class="md-card-content">
+                <h4 class="heading_c uk-margin-bottom">Daily Statistics
+                    <select class="" id="month_filter_id">
+                        <option value="">------</option>
+                        {% for month_number, month_name in months_choices %}
+                            <option value="{{ month_number }}" {% if month_number == current_month %} selected="selected" {% endif %}>{{ month_name }}</option>
+                        {% endfor %}
+                    </select>
+                </h4>
+                <div id="c3_chart_bar_stacked_days" class="c3chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="uk-grid uk-grid-width-large-1-2 uk-grid-width-medium-1-2 uk-grid-medium " >
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                    <span class="uk-text-muted uk-text-small">Agent Statistics</span>
+                    <h2 class="uk-margin-remove">{{ members }}</h2>
+                    <table class="uk-table">
+                        <thead>
+                            <tr>
+                                <th>Agent</th>
+                                <th>Profiled</th>
+                                <th>Carded</th>
+                                <th>Has Wallet</th>
+                                <th>Has NIN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for agent in agents_stats %}
+                            <tr>
+                                <td>{{ agent.agent_name }} </td>
+                                <td>{{ agent.total_profile|intcomma }}</td>
+                                <td>{{ agent.carded|intcomma }}</td>
+                                <td>{{ agent.wallet|intcomma }}</td>
+                                <td>{{ agent.with_id|intcomma }}</td>
+                            </tr>
+                        {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                    <span class="uk-text-muted uk-text-small">Territory Executive Statistics</span>
+                    <table class="uk-table">
+                        <thead>
+                            <tr>
+                                <th>TE</th>
+                                <th>Profiled</th>
+                                <th>Carded</th>
+                                <th>Has Wallet</th>
+                                <th>Has NIN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for te in te_stats %}
+                            <tr>
+                                <td>{{ te.te_name }} </td>
+                                <td>{{ te.total_profile|intcomma }}</td>
+                                <td>{{ te.carded|intcomma }}</td>
+                                <td>{{ te.wallet|intcomma }}</td>
+                                <td>{{ te.with_id|intcomma }}</td>
+                            </tr>
+                        {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block page_specific_scripts %}
+    <!-- page specific plugins -->
+        <!-- d3 -->
+        <script src="{% static 'bower_components/d3/d3.min.js' %}"></script>
+        <script src="{% static 'bower_components/c3js-chart/c3.min.js' %}"></script>
+<!--        <script src="{% static 'assets/js/pages/plugins_charts.min.js' %}"></script>-->
+        <!-- metrics graphics (charts) -->
+        <!--<script src="{% static 'bower_components/metrics-graphics/dist/metricsgraphics.min.js' %}"></script>-->
+        <!-- chartist (charts) -->
+        <!--<script src="{% static 'bower_components/chartist/dist/chartist.min.js' %}"></script>-->
+        <!-- maplace (google maps) -->
+       <!-- <script src="http://maps.google.com/maps/api/js?sensor=true"></script>-->
+        <!--<script src="{% static 'bower_components/maplace-js/dist/maplace.min.js' %}"></script>-->
+        <!-- peity (small charts) -->
+        <!--<script src="{% static 'bower_components/peity/jquery.peity.min.js' %}"></script>-->
+        <!-- easy-pie-chart (circular statistics) -->
+        <!--<script src="{% static 'bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js' %}"></script>-->
+        <!-- countUp -->
+        <script src="{% static 'bower_components/countUp.js/countUp.min.js' %}"></script>
+        <!-- handlebars.js -->
+        <!--<script src="{% static 'bower_components/handlebars/handlebars.min.js' %}"></script>-->
+        <!--<script src="{% static 'assets/js/custom/handlebars_helpers.min.js' %}"></script>-->
+        <!-- CLNDR -->
+        <!--<script src="{% static 'bower_components/clndr/src/clndr.js' %}"></script>-->
+        <!-- fitvids -->
+        <!--<script src="{% static 'bower_components/fitvids/jquery.fitvids.js' %}"></script>-->
+
+        <!--  dashbord functions -->
+        <script src="{% static 'assets/simplemaps/mapdata.js' %}"></script>
+        <script src="{% static 'assets/simplemaps/countrymap.js' %}"></script>
+
+    
+
+   <script>
+       var month_filter_id = $('#month_filter_id').val()
+       console.log("sdsds"+month_filter_id)
+
+       $('#month_filter_id').on('change', function(){
+            var month_filter_id = $('#month_filter_id').val()
+            get_daily(month_filter_id)
+
+       })
+
+
+       $.ajax({
+            url: '{% url 'get_profiles_by_te' %}',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log('Data received:', data.data);
+                // Chart Data
+                var chart = c3.generate({
+                bindto: '#c3_chart_bar_stacked',
+                data: {
+                  columns: [
+                    data.data,
+                    data.carded
+                  ],
+                  axes: {
+                    data1: 'y'
+                  },
+                  types: {
+                    Farmers: 'bar',
+                    CardsIssued: 'bar'
+                  }
+                },
+                axis: {
+                  y: {
+                    label: {
+                      text: 'Profiled Farmers',
+                      position: 'outer-middle'
+                    },
+                    tick: {
+                      format: d3.format("") // ADD
+                    }
+                  },
+                  x: {
+                        type: 'category', // Specify that x-axis is category type
+                        categories: data.tes,
+                        label: {
+                            text: 'Territory Executive',
+                            position: 'outer-middle'
+                        }
+                    },
+
+                }
+            });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', status, error);
+            }
+        });
+
+        get_daily(month_filter_id)
+
+
+
+       function get_daily(month_filter_id){
+            $.ajax({
+                url: '{% url 'get_total_per_day' %}',
+                method: 'GET',
+                data: {month: month_filter_id},
+                dataType: 'json',
+                success: function(data) {
+                    console.log('Data received:', data.days);
+                    // Chart Data
+                    var chart = c3.generate({
+                    bindto: '#c3_chart_bar_stacked_days',
+                    data: {
+                      columns: [
+                        data.days,
+                      ],
+                      axes: {
+                        data1: 'y'
+                      },
+                      types: {
+                        Days: 'bar',
+                      }
+                    },
+                    axis: {
+                      y: {
+                        label: {
+                          text: 'Profiled Farmers',
+                          position: 'outer-middle'
+                        },
+                        tick: {
+                          format: d3.format("") // ADD
+                        }
+                      },
+                      x: {
+                            type: 'category', // Specify that x-axis is category type
+                            categories: data.keys,
+                            label: {
+                                text: 'Territory Executive',
+                                position: 'outer-middle'
+                            }
+                        },
+
+                    }
+                });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', status, error);
+                }
+            });
+       }
+
+
+    </script>
+    {% endblock %}-->

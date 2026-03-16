@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_custom_tags %}
+
+{% block style %}
+    <!-- additional styles for plugins -->
+     <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        .k-combobox{
+            width: 100% !important;
+        }
+    </style>
+    
+{% endblock %}
+{% block page_content %}
+<h3 class="heading_b uk-margin-bottom">Supply Request Form</h3>
+   <div class="md-card">
+        <div class="md-card-content">
+            <form method="POST" class="new-event-form" role="role" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include "error_template.html" with form=form %}
+                <div class="uk-grid">
+                    <div class="uk-width-1-1" >
+                      {% include "form/field.html" with field=form.cooperative_member|htmlattributes:"css=''"  input_group_add_on='<i class="uk-input-group-icon uk-icon-user "></i>' %}
+                      
+                    </div> 
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.supply_date|htmlattributes:"data-uk-datepicker={format:'YYYY-MM-DD'}, class=md-input" input_group_add_on='<i class="uk-input-group-icon uk-icon-calender"></i>' %}
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                    </div>
+                </div>
+                <hr>
+                 <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        
+                        <legend>Breed</legend>
+                        
+                        {% include "error_template.html" with form=variation_form %}
+                        {{ variation_form.management_form }}
+                        {% for form in variation_form %}
+                            {% include "error_template.html" with form=form %}
+                            <div class="link-formset">
+                                <div class="uk-grid" data-uk-grid-margin>
+                                    <div class="uk-width-medium-1-3">
+                                    {% include "form/field.html" with field=form.breed input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-3">
+                                    {% include "form/field.html" with field=form.total input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    
+                                </div>
+                              </div>
+                        {% endfor %}
+                                 
+                    </div>
+                    
+                </div>
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <button type="submit" class="md-btn md-btn-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+
+  <!-- inputmask-->
+    <script src="{% static 'bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js' %}"></script>
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <!--  dropify -->
+    <script src="{% static 'assets/js/custom/dropify/dist/js/dropify.min.js' %}"></script>
+
+    <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+    
+    <script src="{% static 'bower_components/jquery.formset.js' %}"></script>
+    
+   
+    <script>
+        
+        $('.link-formset').formset({
+            addText: 'add + ',
+            deleteText: 'remove -',
+            prefix : 'variation'
+        });
+         
+        $('#id_cooperative_member').kendoComboBox({
+            filter: "contains",
+            suggest: true
+            });
+    </script>
+    
+{% endblock %}

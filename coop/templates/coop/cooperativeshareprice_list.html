@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Cooperative Share Price</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            {% if request.user.profile.is_cooperative %}
+                <a href="{% url 'coop:share_price_create' %}" class="md-btn md-btn-success uk-float-right">Add Share Price</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        {% if request.user.profile.is_union %}
+                        <th>Cooperative</th>
+                        {% endif %}
+                        <th>Price</th>
+                        <th>Remark</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                {% if request.user.profile.is_union %}
+                                <td>{{ item.cooperative }}</td>
+                                {% endif %}
+                                <td>{{ item.price }}</td>
+                                <td>{{ item.remark }}</td>
+                                <td>{{ item.created_by }}</td>
+                                <td>{{ item.update_date }} </td>
+                                <td>
+                                    {% if request.user.profile.is_cooperative %}
+                                        <a href="{% url 'coop:share_price_update' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Edit</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

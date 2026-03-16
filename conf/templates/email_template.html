@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Add any additional styling here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+    <title>{{ subject }}</title>
+</head>
+<body>
+    <div>
+        <p>{{ message|safe }}</p>
+        <!-- Add more content here -->
+    </div>
+    <div class="footer">
+        <p class="contact-info">
+            Regards,<br>
+            The Hamwe Tech Team,<br>
+            HAMWE East Africa Ltd<br>
+            1st Floor Kanjokya House, Lower Kololo, Kampala - Uganda<br>
+            P.O Box 10576, Kampala - Uganda<br>
+            Office No: +256200905775, Email: <a href="mailto:tech@hamwe.org">tech@hamwe.org</a>.<br>
+            Website: <a href="http://www.hamwe.org" target="_blank">www.hamwe.org</a>
+            <img src="{{site}}{% static 'assets/img/logo.png' %}" alt="Company Logo">
+        </p>
+    </div>
+</body>
+</html>

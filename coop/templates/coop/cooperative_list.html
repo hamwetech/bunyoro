@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">FPO List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            
+           <a href="{% url 'coop:create' %}" class="md-btn md-btn-primary uk-float-right">Add FPO</a>
+            
+            <a href="{% url 'coop:upload' %}" class="md-btn md-btn-success uk-float-right">Upload FPO</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>FPO Name</th>
+                        <th>FPO Type</th>
+                        <th>Balance</th>
+                        <th>District</th>
+                        <th>Sub County</th>
+                        <th>Contact Person</th>
+                        <th>Phone Number</th>
+                        <th>Members</th>
+                        <th>Collectios</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td class="uk-text-center"><img class="md-user-image" src="{{ MEDIA_URL }}{{ item.logo }}" alt=""/></td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.fpo_type }}</td>
+                                <td>{{ item.account.balance|default:"-" }}</td>
+                                <td>{{ item.district }}</td>
+                                <td>{{ item.sub_county }}</td>
+                                <td>{{ item.contact_person_name }}</td>
+                                <td>{{ item.phone_number|default:"" }}</td>
+                                <td>{{ item.member_count }}</td>
+                                <td><a href="{% url 'coop:member_list' %}?cooperative={{ item.id }}"><strong>{{ item.get_colections }}</strong></a></td>
+                                <td><strong>{{ item.shares }}</strong></a></td>
+                               <!-- <td>
+                                    
+                                    {% if item.member_count < 1 %}
+                                        <a href="{% url 'coop:delete' item.id %}" class="md-btn md-btn-danger md-btn-wave waves-effect waves-button uk-float-right">Delete</a>
+                                    {% endif %}
+                                    <a href="{% url 'coop:edit' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Edit</a>
+                                    <a href="{% url 'coop:edit' item.id %}" class="md-btn md-btn-primary md-btn-wave waves-effect waves-button uk-float-right">Detail</a>
+                                </td>-->
+                                <td class="uk-text-nowrap ">
+                                   <a href=""><i class="material-icons md-24 uk-text-primary"  title="Detail">remove_red_eye</i></a>
+                                   
+                                    <a href="{% url 'coop:edit' item.id %}"><i class="material-icons md-24" title="Edit">border_color</i></a>
+                                     {% if request.user.is_superuser %}
+                                     {% if item.member_count < 1 %}
+                                         <a href="{% url 'coop:delete' item.id %}"><i class="material-icons md-24  uk-text-danger" title="Delete">delete</i></a>
+                                     {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

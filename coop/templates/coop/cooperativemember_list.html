@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load el_pagination_tags %}
+{% load my_custom_tags %} 
+{% block style %}
+<style type="text/css">
+    .row-pagination{
+        margin: 15px;
+    }
+    .row-pagination a{
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .endless_page_current{
+        background: #7cb342;
+        color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+</style>
+{% endblock %}
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Member List</h2>
+        </div>
+        <div class="uk-width-medium-1-1">
+            {% if request.user.profile.is_union or request.user.profile.is_cooperative %}
+            <a href="{% url 'coop:member_create' %}" class="md-btn md-btn-success uk-float-right">Add Member</a>
+            
+<!--            <a href="{% url 'coop:registration_list' %}" class="md-btn md-btn-success uk-float-right">Registration Fee</a>-->
+            <a href="{% url 'coop:member_upload' %}" class="md-btn md-btn-success uk-float-right">Upload Excel</a>
+            <a  id="download_file" class="md-btn md-btn-primary uk-float-right">Download Excel</a>
+            {% endif %}
+            <a href="{% url 'coop:member_map' %}" class="md-btn md-btn-default uk-float-right">OPEN MAPS</a>
+        </div>
+    </div>
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-1-4">
+                    <h4 class="heading_a uk-margin-bottom">Total: {{ object_list.count }}</h4>
+                </div>
+                <div class="uk-width-medium-1-4">
+                    <h4 class="heading_a uk-margin-bottom">Own Phones: {{ own_phone }}</h4>
+                </div>
+                 <div class="uk-width-medium-1-4">
+                    <h4 class="heading_a uk-margin-bottom">Have Mobile Money: {{ has_mobile_money }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <form class="" method="get">
+            <div class="uk-grid" data-uk-grid-margin>
+                {% for field in form %}
+                    <div class="uk-width-medium-1-5">
+                        {% include 'form/field.html' with field=field %}
+                    </div>
+                {% endfor %}
+                
+                
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-4-5 uk-float-right">
+                </div>
+                <div class="uk-width-medium-1-5 uk-float-right">
+                    <button class="md-btn" > Search </button>
+                    <a href="." class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24 " title="Delete">refresh</i></a>
+                </div>
+             </div>
+            </form>
+            <div class="uk-modal" id="modal_header_footer">
+                <div class="uk-modal-dialog">
+                    <div class="uk-modal-header">
+                        <h3 class="uk-modal-title">Message</h3>
+                    </div>
+                    <p>
+                        <textarea autofocus name="message" id="id_message" class="md-input"  onkeyup="countChar(this)" onKeyPress="countChar(this)" onKeyDown="countChar(this)"></textarea>
+                    </p>
+                     <div id="charNum"></div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button type="button" class="md-btn md-btn-flat uk-modal-close">Close</button>
+                        <button type="button" class="md-btn md-btn-flat md-btn-flat-primary" id="id_send_message">Send</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="uk-grid-divider">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Card Number ID</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Cooperative</th>
+                        <th>District</th>
+                        <th>Sub County</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% paginate object_list %}{% get_pages %}
+                        {% for item in object_list %}
+                            <tr>
+                                <td class="uk-text-center"><img class="md-user-image"  src="{{ MEDIA_URL }}{{ item.image }}" alt=""/></td>
+                                <td>{{ item.first_name|default:'' }} {{ item.surname|default:'' }} {{ item.other_name|default:'' }}
+                                    {% if item.sent_to_tiv %}
+                                    <small><img src="{% static 'assets/img/tiv.jpeg' %}" width="15"></small>
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.consumer_device_id|default:"Not Carded" }} <br> <small>{{ item.member_id }}</small></td>
+                                <td>{{ item.phone_number }}</td>
+                                <td>{{ item.gender }}</td>
+                                <td>{{ item.cooperative  }} <br><small>FG:</small>{{ item.farmer_group  }}</td>
+                                <td>{{ item.district|default:'' }} </td>
+                                <td>{{ item.sub_county|default:'' }} </td>
+                                <td>{{ item.create_by.username}} </td>
+                                <td>{{ item.create_date}} </td>
+
+                                <td class="uk-text-center">
+                                    <a href="{% url 'coop:member_detail' item.id %}" ><i class="material-icons md-24 uk-text-default"  title="Detail">remove_red_eye</i></a>
+                                    {% if request.user.profile.is_cooperative %}
+                                    <a href="{% url 'coop:member_update' item.id %}" ><i class="material-icons md-24" title="Edit">border_color</i></a>
+                                    {% endif %}
+                                    {% if request.user.is_superuser %}
+                                    <a href="{% url 'coop:member_delete' item.id %}" ><i class="material-icons md-24  uk-text-danger" title="Delete">delete</i></a>
+                                    {% endif %}
+                                    {% if request.user.is_superuser %}
+                                    <a href="{% url 'coop:member_qrcode' item.id %}" ><i class="material-icons md-24  uk-text-default" title="QRCODE">border_outer</i></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                 
+            </div>
+            <div class="row-pagination">
+                Showing entries
+                {{ pages.current_start_index }}-{{ pages.current_end_index }} of
+                {{ pages.total_count }}.
+                {# Just print pages to render the Digg-style pagination. #}
+                {% show_pages %}
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-medium-4-5 uk-float-right">
+                </div>
+                 <div class="uk-width-medium-1-5 uk-float-right">
+                    <a href="#" class="md-btn md-btn-success" data-uk-modal="{target:'#modal_header_footer'}" data-uk-tooltip="{cls:'long-text'}" title="To Send Message to a certain Group. First filter the clck here."> Send Message </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        
+        function countChar(val) {
+            var len = val.value.length;
+            if (len >= 160) {
+              val.value = val.value.substring(0, 160);
+            } else {
+              $('#charNum').text(len);
+            }
+        }
+        
+        $('#download_file').on('click', function(){
+            var url = window.location.href;
+            sep = "?";
+           
+            if (url.indexOf('?') >= 0) {
+                sep = "&";
+            } 
+            window.location.href = url+sep+"download=true";
+        });
+        
+        
+        $('#id_send_message').on('click', function(){
+            var message = $('#id_message').val();
+            var query = window.location.search;
+            $.ajax({
+                url: '{% url "coop:communication_send" %}' + query,
+                //url: url,
+                dataType: 'text',
+                type: 'get',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {'message': message},
+                success: function( data, textStatus, jQxhr ){
+                    var res = jQuery.parseJSON(data);
+                    UIkit.modal.confirm(
+                        '<div>Send Communication.</div>'+ '<div> Filter:<b>'+res.message+'</b></div>'+'<div> Message: <div><b>'+message+'</b><div></div>',
+                        function(){
+                            send_communication(query, message);
+                            
+                          }
+                    );
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                }
+            })
+        })
+        
+        function send_communication(search, message) {
+            var urlParams = new URLSearchParams(search);
+            var name = urlParams.get('name');
+            var phone_number = urlParams.get('phone_number');
+            var cooperative = urlParams.get('cooperative');
+            var role = urlParams.get('role');
+            var district = urlParams.get('district');
+            var csrftoken = getCookie('csrftoken');
+            modal = UIkit.modal.blockUI('<div class=\'uk-text-center\'>Processing...</div>');
+            modal
+            console.log( csrftoken );
+            $.ajax({
+                url: '{% url "coop:communication_send" %}',
+                //url: url,
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'name':name,
+                    'phone_number':phone_number,
+                    'cooperative':cooperative,
+                    'role':role,
+                    'district':district,
+                    'message': message
+                    }),
+                success: function( data, textStatus, jQxhr ){
+                    console.log(data)
+                    var res = data;
+                    UIkit.modal.alert(res.message);
+                    UIkit.modal('#modal_header_footer').hide();
+                    modal.hide()
+                    clear_msg_text();
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    var res = jQuery.parseJSON(data);
+                    UIkit.modal.alert(res.message);
+                    UIkit.modal('#modal_header_footer').hide();
+                    modal.hide()
+                    clear_msg_text();
+                }
+            })
+        }
+        
+        function clear_msg_text() {
+            $('#id_message').val('');
+            $('#charNum').text('');
+        }
+        
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        
+        
+        $(function() {
+            $(function() {
+                // enable hires images
+                altair_helpers.retina_images();
+                // fastClick (touch devices)
+                if(Modernizr.touch) {
+                    FastClick.attach(document.body);
+                }
+            });
+        });
+    </script>
+{% endblock %}

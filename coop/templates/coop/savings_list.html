@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Savings List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            
+           <a href="{% url 'coop:savings_create' %}" class="md-btn md-btn-success uk-float-right">Add Savings</a>
+            
+<!--            <a href="{% url 'coop:upload' %}" class="md-btn md-btn-success uk-float-right">Upload Cooperative</a>-->
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Cooperative</th>
+                        <th>Member</th>
+                        <th>Amount</th>
+                        <th>Balance After</th>
+                        <th>Transaction Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.transaction_date }}</td>
+                                <td>{{ item.cooperative|default:"-" }}</td>
+                                <td>{{ item.member }}</td>
+                                <td>{{ item.amount|intcomma }}</td>
+                                <td>{{ item.balance_after|intcomma }}</td>
+
+                                <td>{{ item.create_date }}</td>
+
+                                <td class="uk-text-nowrap ">
+                                   <a href=""><i class="material-icons md-24 uk-text-primary"  title="Detail">remove_red_eye</i></a>
+                                   
+                                    <a href="{% url 'coop:savings_edit' item.id %}"><i class="material-icons md-24" title="Edit">border_color</i></a>
+                                     {% if request.user.is_superuser %}
+                                     {% if item.member_count < 1 %}
+                                         <a href="{% url 'coop:savings_delete' item.id %}"><i class="material-icons md-24  uk-text-danger" title="Delete">delete</i></a>
+                                     {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

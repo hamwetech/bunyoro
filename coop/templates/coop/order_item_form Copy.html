@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_custom_tags %}
+
+{% block style %}
+    <!-- additional styles for plugins -->
+     <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        .k-combobox{
+            width: 100% !important;
+        }
+    </style>
+    
+{% endblock %}
+{% block page_content %}
+    <div class="md-card">
+        <div class="md-card-content">
+            <div class="uk-grid" data-uk-grid-margin="">
+                <div class="uk-width-medium-3-10 uk-row-first">
+                    <div class="md-input-wrapper">
+                        {% include "form/field.html" with field=form.item|htmlattributes:"css=''"  input_group_add_on='<i class="uk-input-group-icon uk-icon-money "></i>' %}
+                    </div>
+                </div>
+                <div class="uk-width-medium-2-10">
+                    <div class="md-input-wrapper">
+                        {% include "form/field.html" with field=form.quantity input_group_add_on='<i class="uk-input-group-icon uk-icon-money "></i>' %}
+                    </div>
+                </div>
+                <div class="uk-width-medium-3-10">
+                    <div class="md-input-wrapper">
+                        {% include "form/field.html" with field=form.price input_group_add_on='<i class="uk-input-group-icon uk-icon-money "></i>' %}
+                    </div>
+                </div>
+                <div class="uk-width-medium-2-10 uk-text-center">
+                    <a href="#" id="id_add" class="md-btn md-btn-primary uk-margin-small-top">Add</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <form method="POST" class="new-event-form" role="role">
+        {% csrf_token %}
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-grid" data-uk-grid-margin="">
+                    <div class="uk-width-1-1 uk-row-first">
+                        <div class="uk-overflow-container">
+                            <table id="dt_tableTools" class="uk-table uk-table-striped items_table">
+                                <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-grid uk-text-right" data-uk-grid-margin="">
+                    
+                    <div class="uk-width-medium-1-1 uk-text-right">
+                        <a href="#" id="id_submit" class="md-btn md-btn-primary uk-margin-small-top">SUBMIT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+
+  <!-- inputmask-->
+    <script src="{% static 'bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js' %}"></script>
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <!--  dropify -->
+    <script src="{% static 'assets/js/custom/dropify/dist/js/dropify.min.js' %}"></script>
+
+    <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+    
+    <script>
+        var share_value = 0;
+        
+        $('#id_item').kendoComboBox({
+            filter: "contains",
+            suggest: true
+        });
+        
+        $("#id_item").on('change', function() {
+            $("#id_price").val('');
+            $("#id_quantity").val('');
+        });
+        
+        $("#id_quantity").on('input', function() {
+            var product = $("#id_item").val();
+            var quantity = $("#id_quantity").val();
+            var url = "http://"+window.location.host +"/product/item/price/"+product
+            $.get(url, function(data, status){
+                var total = quantity * data.price
+                $('#id_price').val(total)
+            });
+        });
+        
+        $("#id_add").on('click', function() {
+            var tbody = $(".items_table");
+            var item = $("#id_item");
+            var quantity = $("#id_quantity");
+            var price = $("#id_price");
+            
+            tbody.append('<tr><td> <input type="hidden" class="item_arr" name="item[]" value='+item.val()+' >'+item.val()+'</td>'+
+                         '<td><input type="text" class="code md-input quantity_arr" id="id_quantity_arr" name="quantity[]" value="'+quantity.val()+'" placeholder="Quantity" /> </td>'+
+                         '<td> <input type="text" class="code md-input price_arr" id="id_price_arr" name="price[]" value="'+price.val()+'" placeholder="Price"/></td>'+
+                         '<td> <a href="javascript:void(0);" class="remCF"><i class="material-icons md-24">&#xE872;</i></a></td></tr>');
+            
+            $(".items_table").on('click','.remCF',function(){
+                $(this).parent().parent().remove();
+            });
+            
+        });
+        
+        $("#id_submit").on('click', function(){
+                var order = []
+                $.each($('.item_arr'), function(){
+                    var form_data ={
+                        "rowid": $(this).val(),
+                        "qty": $('.quantity_arr').val(),
+                        "ajax": $('.price_arr').val()
+                       };
+                    console.log(form_data)
+                })
+            })
+    </script>
+    
+{% endblock %}
+    

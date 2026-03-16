@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Member Shares</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            {% if request.user.profile.is_cooperative %}
+                <a href="{% url 'coop:member_shares_create' %}" class="md-btn md-btn-success uk-float-right">Add Share</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        
+                         <th class="uk-text-nowrap">Member</th>
+                                    <th class="uk-text-nowrap">Amount</th>
+                                    <th class="uk-text-nowrap">Shares</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td class="uk-width-3-10 uk-text-nowrap"><a href="">{{ item.name }}</a></td>
+                                <td class="uk-width-2-10 uk-text-nowrap">{{ item.total_amount|intcomma }}</td>
+                                <td class="uk-width-2-10 uk-text-nowrap">{{ item.total_shares|intcomma }}</td>
+                                <td>
+                                    <a href="{% url 'coop:member_shares_list' item.cooperative_member %} " class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Detail</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

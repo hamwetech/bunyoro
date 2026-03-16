@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Clan List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+
+           <a href="{% url 'coop:clan-create' %}" class="md-btn md-btn-primary uk-float-right">Add Clan</a>
+
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+
+                                <td>{{ item.name }}</td>
+                                <td class="uk-text-nowrap uk-text-right">
+                                   <a href=""><i class="material-icons md-24 uk-text-primary"  title="Detail">remove_red_eye</i></a>
+
+                                    <a href="{% url 'coop:clan-edit' item.id %}"><i class="material-icons md-24" title="Edit">border_color</i></a>
+                                     {% if request.user.is_superuser %}
+                                     {% if item.member_count < 1 %}
+                                         <a href="{% url 'coop:clan-delete' item.id %}"><i class="material-icons md-24  uk-text-danger" title="Delete">delete</i></a>
+                                     {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,316 @@
+{% load static %}
+<aside id="sidebar_main">
+
+        <div class="sidebar_main_header" style="height:auto !important; padding-top: 5px;">
+            <!--<div class="sidebar_logo">
+                <a href="index.html" class="sSidebar_hide"><img src="assets/img/logo_main.png" alt="" height="15" width="71"/>sas</a>
+                <a href="index.html" class="sSidebar_show"><img src="assets/img/logo_main_small.png" alt="" height="32" width="32"/>asas</a>
+            </div>-->
+            <div class="sidebar_actions uk-text-center" >
+                <h4 style="color: #000 !important;"><span class="uk-text-bold">{% if request.user.is_superuser %}SUPERUSER {% else %}{{ request.user.profile.access_level }}{% endif %}</span>
+                <br><small>{{ request.user.cooperative_admin.cooperative }}</small></h4>
+
+            </div>
+        </div>
+
+        <div class="menu_section">
+            <ul>
+                <li {% if '_dashboard' in active %}class="current_section"{% endif %} title="Dashboard">
+                    <a href="{% url 'dashboard' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                        <span class="menu_title">Dashboard</span>
+                    </a>
+
+                </li>
+                {% if request.user.profile.is_union %}
+<!--                    <li {% if '_dashboard_te' in active %}class="current_section"{% endif %} title="Dashboard">-->
+<!--                        <a href="{% url 'te_dashboard' %}">-->
+<!--                            <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>-->
+<!--                            <span class="menu_title">TE Dashboard</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+                    <hr>
+                    <li {% if '_agent' in active %}class="current_section"{% endif %} title="Agents">
+                        <a href="{% url 'coop:agent_list' %}">
+                            <span class="menu_icon"><i class="material-icons">assignment_id</i></span>
+                            <span class="menu_title">Agent</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if request.user.profile.is_union %}
+                    <!-- Union User -->
+<!--                    <li {% if '_cooperative' in active %}class="current_section"{% endif %} title="Cooperative">-->
+<!--                        <a href="{% url 'coop:list' %}">-->
+<!--                            <span class="menu_icon"><i class="material-icons">account_balance</i></span>-->
+<!--                            <span class="menu_title">Cooperatives</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+<!--                    <li {% if '_cooperative' in active %}class="current_section"{% endif %} title="Cooperative">-->
+<!--                        <a href="{% url 'coop:fg_list' %}">-->
+<!--                            <span class="menu_icon"><i class="material-icons">account_balance</i></span>-->
+<!--                            <span class="menu_title">Farmer Group</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+
+                    <li {% if '_cooperative' in active %}class="current_section"{% endif %} title="Cooperative">
+                        <a href="{% url 'coop:clan-list' %}">
+                            <span class="menu_icon"><i class="material-icons">account_balance</i></span>
+                            <span class="menu_title">Clan</span>
+                        </a>
+                    </li>
+
+<!--                    <li {% if '_partner' in active %}class="current_section"{% endif %} title="Partner">-->
+<!--                        <a href="{% url 'partner:list' %}">-->
+<!--                            <span class="menu_icon"><i class="material-icons">extension</i></span>-->
+<!--                            <span class="menu_title">Partners</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <hr>
+<!--                    <li {% if '_coop_shares' in active %}class="current_section"{% endif %} title="Coop Shares">-->
+<!--                        <a href="{% url 'coop:share_list' %}">-->
+<!--                            <span class="menu_icon"><i class="material-icons">&#xE0B9;</i></span>-->
+<!--                            <span class="menu_title">Cooperative Shares</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <!--<li {% if '_coop_contrib' in active %}class="current_section"{% endif %} title="Scrum Board">-->
+                    <!--    <a href="{% url 'coop:contribution_list' %}">-->
+                    <!--        <span class="menu_icon"><i class="material-icons">&#xE85C;</i></span>-->
+                    <!--        <span class="menu_title">Coop Contribution</span>-->
+                    <!--    </a>-->
+                    <!--</li>-->
+                    <!-- /union user -->
+                {% endif %}
+                {% if request.user.profile.is_union or request.user.profile.is_cooperative  or request.user.profile.is_partner %}
+                <li {% if '_coop_member' in active %}class="current_section"{% endif %} title="Coop Member">
+                    <a href="{% url 'coop:member_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Members</span>
+                    </a>
+                </li>
+                <!--<li {% if '_coop_member' in active %}class="current_section"{% endif %} title="Snippets">-->
+                <!--    <a href="{% url 'coop:member_subscription_list' %}">-->
+                <!--        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>-->
+                <!--        <span class="menu_title">Member Subscription</span>-->
+                <!--    </a>-->
+                <!--</li>-->
+<!--                <li {% if '_coop_member_shares' in active %}class="current_section"{% endif %} title="Member Shares">-->
+<!--                    <a href="{% url 'coop:member_shares' %}">-->
+<!--                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>-->
+<!--                        <span class="menu_title">Member Shares</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+
+                {% endif %}
+                <li {% if '_savings' in active %}class="current_section"{% endif %} title="Member Shares">
+                    <a href="{% url 'coop:savings_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Savings</span>
+                    </a>
+                </li>
+                <hr>
+                <li {% if '_transaction' in active %}class="current_section"{% endif %} title="Member Shares">
+                    <a href="{% url 'account:transaction_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Transactions</span>
+                    </a>
+                </li>
+                <hr>
+                <li {% if '_payment' in active %}class="current_section"{% endif %} title="Member Shares">
+                    <a href="{% url 'payment:list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Payments</span>
+                    </a>
+                </li>
+                <hr>
+                <li {% if '_collection' in active %}class="current_section"{% endif %} title="Supply Request">
+                    <a href="{% url 'coop:collection_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Collection</span>
+                    </a>
+                </li>
+                <hr>
+                <li {% if '_order' in active %}class="current_section"{% endif %} title="Supply Request">
+                    <a href="{% url 'coop:order_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Order</span>
+                    </a>
+                </li>
+                <hr>
+
+                {% if request.user.profile.is_cooperative or request.user.profile.is_credit_manager %}
+                    <li {% if '__loan' in active %}class="current_section"{% endif %} title="Loan Request">
+                        <a href="{% url 'credit:loan_list' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                            <span class="menu_title">Loan Requests</span>
+                        </a>
+                    </li>
+                    <li {% if '__loan_transaction' in active %}class="current_section"{% endif %} title="Loan Request">
+                        <a href="{% url 'credit:loan_transaction_list' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                            <span class="menu_title">Loan Transaction</span>
+                        </a>
+                    </li>
+                    <hr>
+                {% endif %}
+
+<!--                <li {% if '_device' in active %}class="current_section"{% endif %} title="Supply Request">-->
+<!--                    <a href="{% url 'profile:device_list' %}">-->
+<!--                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>-->
+<!--                        <span class="menu_title">Devices</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li {% if '_cards' in active %}class="current_section"{% endif %} title="Supply Request">-->
+<!--                    <a href="{% url 'profile:assign_cards_list' %}">-->
+<!--                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>-->
+<!--                        <span class="menu_title">Cards</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <hr>-->
+
+                <!--<li {% if '_coop_supply_request' in active %}class="current_section"{% endif %} title="Supply Request">
+                    <a href="{% url 'coop:request_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Supply Request</span>
+                    </a>
+                </li>
+                {% if request.user.profile.is_union or request.user.profile.is_partner %}
+                    <li {% if '_op' in active %} class="current_section" {% endif %} title="Purchase">
+                        <a href="{% url 'op:purchase_list' %}">
+                            <span class="menu_icon"><i class="material-icons">add_shopping_cart</i></span>
+                            <span class="menu_title">Purchase Transaction</span>
+                        </a>
+                    </li>
+                {% endif %}-->
+                {% if request.user.profile.is_union or request.user.profile.is_cooperative or request.user.profile.is_partner %}
+
+                    <li {% if '_cards' in active %}class="current_section"{% endif %} title="Supply Request">
+                        <a href="{% url 'coop:season_list' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                            <span class="menu_title">Sessions</span>
+                        </a>
+                    </li>
+
+                <li {% if '_cards' in active %}class="current_section"{% endif %} title="Supply Request">
+                        <a href="{% url 'coop:oko_location_list' %}">
+                            <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                            <span class="menu_title">OKO Location</span>
+                        </a>
+                    </li>
+
+                   <li {% if '_training' in active %}class="current_section"{% endif %} title="Training">
+                        <a href="{% url 'op:purchase_list' %}">
+                            <span class="menu_icon"><i class="material-icons">mail</i></span>
+                            <span class="menu_title">Training</span>
+                        </a>
+                        <ul>
+                            <li {% if '__training' in active %}class="act_item"{% endif %}><a href="{% url 'activity:training_list' %}">Training</a></li>
+                            {% if request.user.profile.is_union %}
+                                <li {% if '__thematic' in active %}class="act_item"{% endif %}><a href="{% url 'activity:thematic_list' %}">Thematic Areas</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+
+                {% endif %}
+                {% if request.user.profile.is_union or request.user.profile.is_cooperative %}
+                    <li {% if '_messaging' in active %}class="current_section"{% endif %} title="Messaging">
+                        <a href="{% url 'op:purchase_list' %}">
+                            <span class="menu_icon"><i class="material-icons">mail</i></span>
+                            <span class="menu_title">Messaging</span>
+                        </a>
+                        <ul>
+                            <li {% if '__send' in active %}class="act_item"{% endif %}><a href="{% url 'messaging:message_send' %}">Create Message</a></li>
+                            <li {% if '__sent' in active %}class="act_item"{% endif %}><a href="{% url 'messaging:message_list' %}">Message List</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if request.user.profile.is_union or request.user.profile.is_cooperative %}
+<!--                <li {% if '_coop_settings' in active %}class="current_section"{% endif %}>-->
+<!--                    <a href="#">-->
+<!--                        <span class="menu_icon"><i class="material-icons">&#xE8D2;</i></span>-->
+<!--                        <span class="menu_title">Coop Settings</span>-->
+<!--                    </a>-->
+<!--                    <ul>-->
+<!--                        <li {% if '__share_price' in active %}class="act_item"{% endif %}><a href="{% url 'coop:share_price_list' %}">Share Price</a></li>-->
+<!--                        <li {% if '_registration_fee' in active %}class="act_item"{% endif %}><a href="{% url 'coop:fee_list' %}">Registration Fee</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+                {% endif %}
+
+                {% if request.user.profile.is_cooperative and not request.user.is_superuser %}
+                <li {% if '_coop_users' in active %}class="current_section"{% endif %} title="Coop User">
+                    <a href="{% url 'profile:user_list' %}">
+                        <span class="menu_icon"><i class="material-icons">&#xE86F;</i></span>
+                        <span class="menu_title">Users</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if request.user.profile.is_union or request.user.profile.is_partner %}
+                <li {% if '_union_suppiers' in active %}class="current_section"{% endif %}>
+                        <a href="#">
+                            <span class="menu_icon"><i class="material-icons">settings_input_component</i></span>
+                            <span class="menu_title">Supplier Config</span>
+                        </a>
+                        <ul>
+
+                            <li {% if '__supplier' in active %}class="act_item"{% endif %}><a href="{% url 'product:supplier_list' %}">Supplier</a></li>
+                            <li {% if '__category' in active %}class="act_item"{% endif %}><a href="{% url 'product:category_list' %}">Category ---</a></li>
+                            <li {% if '__Item' in active %}class="act_item"{% endif %}><a href="{% url 'product:item_list' %}">Supplier Items</a></li>
+                       </ul>
+                    </li>
+                    <li {% if '_union_prod' in active %}class="current_section"{% endif %}>
+                        <a href="#">
+                            <span class="menu_icon"><i class="material-icons">settings_input_component</i></span>
+                            <span class="menu_title">Product Config</span>
+                        </a>
+                        <ul>
+                            <li {% if '__unit' in active %}class="act_item"{% endif %}><a href="{% url 'product:unit_list' %}">Unit</a></li>
+                            <li {% if '__product' in active %}class="act_item"{% endif %}><a href="{% url 'product:variation_list' %}">Product</a></li>
+                            <li {% if '__price' in active %}class="act_item"{% endif %}><a href="{% url 'product:price_list' %}">Product Price</a></li>
+                            <hr>
+
+                       </ul>
+                    </li>
+                 {% endif %}
+
+                 {% if request.user.is_superuser %}
+                 <li>
+                    <a href="#">
+                        <span class="menu_icon"><i class="material-icons">account_circle</i></span>
+                        <span class="menu_title">User Management</span>
+                    </a>
+                    <ul>
+                        <li {% if '__user' in active %}class="act_item"{% endif %}><a href="{% url 'profile:user_list' %}">User</a></li>
+                        <li {% if '__acess_level' in active %}class="act_item"{% endif %}><a href="{% url 'profile:access_list' %}">Access Level</a></li>
+                        <li {% if '__group' in active %}class="act_item"{% endif %}><a href="{% url 'profile:group_list' %}">Group Permission</a></li>
+                        <li {% if '__access_group' in active %}class="act_item"{% endif %}><a href="{% url 'profile:ag_list' %}">Access Group</a></li>
+                    </ul>
+                </li>
+                <li {% if '_config' in active %}class="current_section"{% endif %}>
+                    <a href="#">
+                        <span class="menu_icon"><i class="material-icons">settings</i></span>
+                        <span class="menu_title">System Configuration</span>
+                    </a>
+                    <ul>
+                        <li  {% if '__messageT' in active %}class="act_item"{% endif %}><a href="{% url 'conf:sms_template' %}">SMS Templates</a></li>
+                        <li  {% if '__region' in active %}class="act_item"{% endif %}><a href="{% url 'conf:region_list' %}">Region</a></li>
+                        <li  {% if '__district' in active %}class="act_item"{% endif %}><a href="{% url 'conf:district_list' %}">District</a></li>
+                        <li  {% if '__county' in active %}class="act_item"{% endif %}><a href="{% url 'conf:county_list' %}">County</a></li>
+                        <li  {% if '__sub_county' in active %}class="act_item"{% endif %}><a href="{% url 'conf:subcounty_list' %}">Sub County</a></li>
+                        <li  {% if '__parish' in active %}class="act_item"{% endif %}><a href="{% url 'conf:parish_list' %}">Parish</a></li>
+                        <li  {% if '__village' in active %}class="act_item"{% endif %}><a href="{% url 'conf:village_list' %}">Village</a></li>
+                        <li  {% if '__payment_method' in active %}class="act_item"{% endif %}><a href="{% url 'conf:payment_list' %}">Payment Mode</a></li>
+                        <li  {% if '__email_smtp' in active %}class="act_item"{% endif %}><a href="layout_top_menu.html">SMTP Email</a></li>
+                        <li  {% if '__sms_api' in active %}class="act_item"{% endif %}><a href="layout_header_full.html">SMS API</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+          </ul>
+
+        </div>
+        <div class="menu_bottom" style="padding: 8px 20px; height: auto; margin-top: 20px">
+            <img src="{% static 'assets/img/logo.png' %}" width="100" style="bottom: 0px;">
+
+        </div>
+    </aside><!-- main sidebar end -->

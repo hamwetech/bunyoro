@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load el_pagination_tags %}
+{% load material_form %}
+{% block style %}
+<style type="text/css">
+    .row-pagination{
+        margin: 15px;
+    }
+    .row-pagination a{
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .endless_page_current{
+        background: #7cb342;
+        color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+</style>
+{% endblock %}
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Loan Request List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+           <a href="{% url 'credit:cm_create' %}" class="md-btn md-btn-success uk-float-right">Add Credit Manager</a>
+           <a href="{% url 'credit:loan_repayment' %}" class="md-btn md-btn-primary uk-float-right">Loan Repayment Logs</a>
+           <a href="{% url 'credit:loan_upload' %}" class="md-btn md-btn-success uk-float-right">Upload Loan</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <form class="" method="get">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        {% for field in form %}
+                            <div class="uk-width-medium-1-5">
+                                {% include 'form/field.html' with field=field %}
+                            </div>
+                        {% endfor %}
+
+
+                    </div>
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-4-5 uk-float-right">
+                        </div>
+                        <div class="uk-width-medium-1-5 uk-float-right">
+                            <button class="md-btn" > Search </button>
+                            <a href="." class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24 " title="Delete">refresh</i></a>
+                            <a  id="download_file" class="md-btn md-btn-success uk-float-right">Download Excel</a>
+                        </div>
+                     </div>
+                </form>
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Member</th>
+                        <th>Cooperative</th>
+                        <th>Amount</th>
+                        <th>Approved Amount</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% paginate object_list %}{% get_pages %}
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.reference }}</td>
+                                <td>{{ item.member }}</td>
+                                <td>{{ item.member.cooperative }}</td>
+                                <td>{{ item.requested_amount|intcomma }}</td>
+                                <td>{{ item.approved_amount|default:""|intcomma }}</td>
+                                <td>{{ item.request_date|date:"Y-m-d" }}</td>
+                                <td>{{ item.status }}</td>
+
+                                    <td>
+                                        {% if request.user.profile.is_credit_manager or request.user.profile.is_union %}
+                                        <a href="{% url 'credit:loan_edit' item.id %}" class="md-btn md-btn-warning waves-effect waves-button uk-float-right">EDIT</a>
+
+                                            <a href="{% url 'credit:loan_detail' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">OPEN</a>
+                                        {% endif %}
+                                        {% if request.user.is_superuser %}
+                                            <a href="{% url 'credit:loan_delete' item.id %}" class="md-btn md-btn-danger waves-effect waves-button uk-float-right">DELETE</a>
+                                        {% endif %}
+                                    </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+             <div class="row-pagination">
+                Showing entries
+                {{ pages.current_start_index }}-{{ pages.current_end_index }} of
+                {{ pages.total_count }}.
+                {# Just print pages to render the Digg-style pagination. #}
+                {% show_pages %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+
+    <script>
+        $('#download_file').on('click', function(){
+            var url = window.location.href;
+            sep = "?";
+
+            if (url.indexOf('?') >= 0) {
+                sep = "&";
+            }
+            window.location.href = url+sep+"download=true";
+        });
+
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

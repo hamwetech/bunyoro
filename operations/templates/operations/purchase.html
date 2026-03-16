@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+{% block style %}
+    <!-- additional styles for plugins -->
+    <!-- dropify -->
+    <link rel="stylesheet" href="{% static 'assets/skins/dropify/css/dropify.css' %}">
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        #id_common_animal_deseases{height: auto !important; min-height: 0px !important;}
+    </style>
+{% endblock %}
+{% block page_content %}
+<h3 class="heading_b uk-margin-bottom">Purchase</h3>
+   <div class="md-card">
+        <div class="md-card-content">
+            <form method="POST" class="new-event-form" role="role" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include "error_template.html" with form=form %}
+                
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.transaction_date input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.seller_msisdn input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.seller_name input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.cooperative input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.farm_name input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.address input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                    
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-3">
+                        {% include "form/field.html" with field=form.town input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                    <div class="uk-width-medium-1-3">
+                        {% include "form/field.html" with field=form.district input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                     <div class="uk-width-medium-1-3">
+                        {% include "form/field.html" with field=form.gps_coodinates input_group_add_on='<i class="uk-input-group-icon uk-icon-exchange"></i>' %}
+                    </div>
+                </div>
+                
+                
+                
+                <hr>
+                 <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-1">
+                        
+                        <legend>Breed</legend>
+                        {{ product_formset.management_form }}
+                        {% for form in product_formset %}
+                            {% include "error_template.html" with form=form %}
+                            <div class="uk-width-1-1">
+                                <h2 class="heading_b uk-margin-bottom uk-float-right class_total">
+                                     0
+                                     <span class="sub-heading">Total</span>
+                                 </h2>
+                            </div>
+                            <div class="link-formset">
+                                
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.breed input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.count input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.identification input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.coat_color input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    
+                                </div>
+                                <div class="uk-grid">
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.unit_price input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.quantity input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.total_amount input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                    <div class="uk-width-medium-1-5">
+                                        {% include "form/field.html" with field=form.paid_amount input_group_add_on='<i class="uk-input-group-icon uk-icon-hashtag"></i>' %}
+                                    </div>
+                                </div>
+                                <hr class="uk-grid-divider">
+                              </div>
+                        {% endfor %}
+                    </div>
+                    <div class="uk-width-1-1">
+                       <h2 class="heading_b uk-margin-bottom uk-float-right class_total">
+                            0
+                            <span class="sub-heading">Total</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="uk-grid">
+                    <div class="uk-width-1-2">
+                        <button type="submit" class="md-btn md-btn-success">Save</button>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+  <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <!--  dropify -->
+    <script src="{% static 'assets/js/custom/dropify/dist/js/dropify.min.js' %}"></script>
+
+    <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    <script>
+    // load parsley config (altair_admin_common.js)
+    altair_forms.parsley_validation_config();
+    // load extra validators
+    altair_forms.parsley_extra_validators();
+    </script>
+    <script src="{% static 'bower_components/parsleyjs/dist/parsley.min.js' %}"></script>
+    <!--<!-- jquery steps -->-->
+    <!--<script src="{% static 'assets/js/custom/wizard_steps.min.js' %}"></script>-->
+    <!---->
+    <!--<!--  forms wizard functions -->
+    <!--<script src="{% static 'assets/js/pages/forms_wizard.min.js' %}"></script>-->
+    
+    <script src="{% static 'bower_components/jquery.formset.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+    
+     <script>
+        $('.link-formset').formset({
+            addText: 'add + ',
+            deleteText: 'remove -',
+            prefix : 'product'
+        });
+        
+        $("#id_transaction_date").kendoDatePicker({
+            format: "yyyy-MM-dd",
+         });
+        
+        function get_price() {
+            console.log("data");
+            
+        }
+        
+        function get_total() {
+            var forms = $('#id_product-TOTAL_FORMS').val();
+            var total = 0;
+            console.log("Total");
+            for(var i=0; i<forms; i++){
+                var v = $('#id_product-'+i+'-total_amount').val();
+                total = parseFloat(total) + parseFloat(v);
+                console.log(total);
+            }
+            $('.class_total').html(total);
+        }
+        
+        function get_price() {
+            var forms = $('#id_product-TOTAL_FORMS').val();
+            for(var i=0; i<forms; i++){
+                console.log(i);
+                $('#id_product-'+i+'-unit_price').addClass( " label-fixed " );
+                $('#id_product-'+i+'-quantity').addClass( " label-fixed " );
+                $('#id_product-'+i+'-total_amount').addClass( " label-fixed " );
+                $('#id_product-'+i+'-paid_amount').addClass( " label-fixed " );
+                
+                 console.log('#id_product-'+i+'-quantityyytt');
+                $("#id_product-"+i+"-breed").change(function(){
+                    console.log("#id_product-"+(i-1)+"-breed");
+                    var opt = $("#id_product-"+(i-1)+"-breed").val();
+                    $.ajax({
+                        url: '{% url "op:purchase" %}?per_kilo='+opt,
+                        method: 'GET',
+                        dataType: "json",
+                        success: function (data) {
+                            $('#id_product-'+(i-1)+'-unit_price').val(data.price);
+                        }
+                    });
+                });
+               
+                $('#id_product-'+i+'-quantity').on('input', function(){
+                    
+                    var qty = $('#id_product-'+(i-1)+'-quantity').val();
+                    var up = $('#id_product-'+(i-1)+'-unit_price').val();
+                    var total = qty * up;
+                    console.log(total);
+                    $('#id_product-'+(i-1)+'-total_amount').val(total);
+                    get_total();
+                });
+                
+                $('#id_product-'+i+'-unit_price').on('input change keyup ', function(){
+                    
+                    var qty = $('#id_product-'+(i-1)+'-quantity').val();
+                    var up = $('#id_product-'+(i-1)+'-unit_price').val();
+                    var total = qty * up;
+                    console.log(total);
+                    $('#id_product-'+(i-1)+'-total_amount').val(total);
+                    get_total();
+                });
+            }
+        }
+        get_price();
+        $('.add-row').click(function(){
+            get_price();
+        });
+        function addCommas(x) {
+            var parts = x.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+        
+     </script>
+    
+{% endblock %}

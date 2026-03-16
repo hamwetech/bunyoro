@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Product List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            <a href="{% url 'product:variation_create' %}" class="md-btn md-btn-success uk-float-right">Add Product</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Product</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>
+                                   
+                                    {% for variation in item.product_variation %}
+                                        <div><strong>- {{ variation }}</strong><div>
+                                    {% endfor %}
+                                
+                                </td>
+                                <td>
+                                    <!--<a href="#"><i class="md-icon material-icons"></i></a>
+                                    <a href="#"><i class="md-icon material-icons">detail</i></a>-->
+                                   <a href="{% url 'product:variation_edit' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right"><i class="md-icon material-icons"></i>Edit</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_content %}
+<!-- ============================================================== -->
+<!-- Start Page Content -->
+<!-- ============================================================== -->
+<!-- basic table -->
+<div class="uk-grid" data-uk-grid-margin>
+    <div class="uk-width-medium-1-2">
+        <h2 class="heading_a uk-margin-bottom">Device Map Location</h2>
+    </div>
+    <div class="uk-width-medium-1-2">
+        <a href="{% url 'profile:device_list' %}" class="md-btn md-btn-success uk-float-right" target="_blank">Device List</a>
+    </div>
+</div>
+
+<h4 class="card-title">Devices</h4>
+<form class="" method="get">
+            <div class="uk-grid" data-uk-grid-margin>
+                {% for field in form %}
+                    <div class="uk-width-medium-1-5">
+                        {% include 'form/field.html' with field=field %}
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-4-5 uk-float-right">
+                </div>
+                <div class="uk-width-medium-1-5 uk-float-right">
+                    <button class="md-btn" > Search </button>
+                    <a href="." class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24 " title="Delete">refresh</i></a>
+                </div>
+             </div>
+            </form>
+    <div id="map_2" class="gmaps" style="width:100%;height:700px;"></div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_specific_scripts %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDahoDk15oaz8VJ135FRLFRIFb2yI0CA4"></script>
+
+<script src="{% static 'assets/gmaps/gmaps.min.js' %}"></script>
+<script src="{% static 'assets/maps/map-google-device.init.js' %}"></script>
+{% endblock %}

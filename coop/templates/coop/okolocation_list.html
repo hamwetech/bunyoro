@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+{% block style %}
+<style>
+    .uk-overflow-container {
+        overflow: auto !important;
+}
+</style>
+{% endblock %}
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h4 class="heading_a uk-margin-bottom">OKO Location List</h4>
+        </div>
+        <div class="uk-width-medium-1-2">
+            <a href="{% url 'coop:oko_location_upload' %}" class="md-btn md-btn-success uk-float-right">Upload OKO Location</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="dt_individual_search" class="uk-table uk-table-striped" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>District</th>
+                        <th>Sub County</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.id }} {{ item.region }}</td>
+                                <td>{{ item.district }}</td>
+                                <td>{{ item.sub_county }}</td>
+
+                                <td style="margin: 0px; min-height: 34px;">
+
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- datatables -->
+    <script src="{% static 'bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
+    <!-- datatables colVis-->
+    <script src="{% static 'bower_components/datatables-colvis/js/dataTables.colVis.js' %}"></script>
+<!-- datatables tableTools-->
+    <script src="{% static 'bower_components/datatables-tabletools/js/dataTables.tableTools.js' %}"></script>
+    <!-- datatables custom integration -->
+    <script src="{% static 'assets/js/custom/datatables_uikit.min.js' %}"></script>
+
+    <!--  datatables functions -->
+    <script src="{% static 'assets/js/pages/plugins_datatables.min.js' %}"></script>
+
+
+{% endblock %}

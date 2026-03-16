@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Verification Code</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #7cb342 0%, #7cb256 100%);
+            padding: 32px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            height: 40px;
+            margin-bottom: 16px;
+        }
+
+        .company-name {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e293b;
+        }
+
+        .otp-container {
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .otp-code {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #1e293b;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .otp-expiry {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .warning-box {
+            background: #fef3cd;
+            border: 1px solid #fde68a;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .warning-title {
+            color: #92400e;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .warning-text {
+            color: #92400e;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .support-section {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 24px;
+            margin-top: 32px;
+        }
+
+        .support-text {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .support-email {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer {
+            background: #f1f5f9;
+            padding: 24px 40px;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .social-links {
+            margin: 16px 0;
+        }
+
+        .social-icon {
+            display: inline-block;
+            margin: 0 8px;
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 24px;
+            }
+
+            .otp-code {
+                font-size: 32px;
+                letter-spacing: 6px;
+            }
+
+            .header, .footer {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://hamwe.eastafrica/logo.png" alt="Hamwe EA" class="logo">
+            <h1 class="company-name">My-KOOP</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2 class="greeting">Hello {{user_name}},</h2>
+
+            <p>You're just one step away! Use the verification code below to complete your {{action_type}}.</p>
+
+            <!-- OTP Code -->
+            <div class="otp-container">
+                <h3 class="otp-code">{{otp_code}}</h3>
+                <p class="otp-expiry">This code expires in {{expiry_minutes}} minutes</p>
+            </div>
+
+            <p>Enter this code in the verification page to proceed. If you didn't request this code, please ignore this email.</p>
+
+            <!-- Security Warning -->
+            <div class="warning-box">
+                <h4 class="warning-title">🔒 Security Alert</h4>
+                <p class="warning-text">
+                    Never share this code with anyone. Hamwe EA will never ask for your verification code, password, or other sensitive information via email or phone.
+                </p>
+            </div>
+        </div>
+
+        <!-- Support Section -->
+        <div class="content" style="padding-top: 0;">
+            <div class="support-section">
+                <p class="support-text">Need help? Contact our support team:</p>
+                <a href="mailto:support@hamwe.eastafrica" class="support-email">support@hamwe.eastafrica</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                This email was sent to {{user_email}} because you initiated a verification request for your Hamwe Eastafrica account.
+            </p>
+            <p class="footer-text">
+                Hamwe EA Ltd.<br>
+                Kampala, Uganda
+            </p>
+            <div class="social-links">
+                <a href="https://twitter.com/hamweeastafrica" class="social-icon">Twitter</a>
+                <a href="https://linkedin.com/company/hamweeastafrica" class="social-icon">LinkedIn</a>
+                <a href="https://facebook.com/hamweeastafrica" class="social-icon">Facebook</a>
+            </div>
+            <p class="footer-text">
+                © 2024 Hamwe EA Ltd. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

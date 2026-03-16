@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Purchase Transaction</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            <a href="{% url 'op:purchase' %}" class="md-btn md-btn-success uk-float-right">Purchase Transaction</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Seller</th>
+                        <th>Location</th>
+                        <th>Cooperative</th>
+                        <th>Agent</th>
+                        <th>Amount</th>
+                        <th>Paid</th>
+                        <th>Transaction Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.purchase.transaction_id }}</td>
+                                <td>{{ item.purchase.seller_name }} <p>{{ item.purchase.seller_msisdn }}</p></td>
+                                <td>{{ item.purchase.district }}</td>
+                                <td>{{ item.purchase.cooperative }}</td>
+                                <td>{{ item.partner_staff }}</td>
+                                <td>{{ item.purchase.total_amount }}</td>
+                                <td>{{ item.purchase.paid_amount }}</td>
+                                <td>{{ item.purchase.transaction_date }} </td>
+                                <td>
+                                    <a href="" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Details</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

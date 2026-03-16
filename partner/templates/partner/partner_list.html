@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Partners List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            <a href="{% url 'partner:create' %}" class="md-btn md-btn-success uk-float-right">Add Partner</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Phone Number</th>
+                        <th>Active</th>
+                        <th>Create Date</th>
+                        
+                        <th></th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td class="uk-text-center"><img class="md-user-image" src="{{ MEDIA_URL }}{{ item.logo }}" alt=""/></td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.code }}</td>
+                                <td>{{ item.phone_number }}</td>
+                                <td>{{ item.is_active }}</td>
+                                <td>{{ item.create_date }}</td>
+                                <!-- <td>
+                                    
+                                    {% if item.member_count < 1 %}
+                                        <a href="{% url 'coop:delete' item.id %}" class="md-btn md-btn-danger md-btn-wave waves-effect waves-button uk-float-right">Delete</a>
+                                    {% endif %}
+                                    <a href="{% url 'coop:edit' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Edit</a>
+                                    <a href="{% url 'coop:edit' item.id %}" class="md-btn md-btn-primary md-btn-wave waves-effect waves-button uk-float-right">Detail</a>
+                                </td>-->
+                                <td class="uk-text-nowrap ">
+                                    <a href="{% url 'partner:edit' item.id %}" class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24" title="Edit">border_color</i></a>
+                                    <a href="{% url 'partner:staff_list' item.id %}" class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24 uk-text-success"  title="Detail">remove_red_eye</i></a>
+                                     {% if item.member_count < 1 %}
+                                        <a href="{% url 'coop:delete' item.id %}" class="md-btn md-btn-small md-btn-flat md-btn-flat-primary uk-float-right uk-margin-small-left"><i class="material-icons md-24  uk-text-danger" title="Delete">delete</i></a>
+                                     {% endif %}   
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

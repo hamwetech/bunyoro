@@ -1,0 +1,24 @@
+VERIFICATION CODE - My-KOOP
+
+Hello {{user_name}},
+
+You're just one step away! Use the verification code below to complete your {{action_type}}.
+
+VERIFICATION CODE: {{otp_code}}
+
+This code expires in {{expiry_minutes}} minutes.
+
+Enter this code in the verification page to proceed. If you didn't request this code, please ignore this email.
+
+🔒 SECURITY ALERT:
+Never share this code with anyone. Hamwe EA will never ask for your verification code, password, or other sensitive information via email or phone.
+
+Need help? Contact our support team: support@hamwe.eastafrica
+
+---
+This email was sent to {{user_email}} because you initiated a verification request for your Hamwe Eastafrica account.
+
+Hamwe Eastafrica Ltd.
+Kampala, Uganda
+
+© 2024 Hamwe EA Ltd. All rights reserved.

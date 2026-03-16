@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h4 class="heading_a uk-margin-bottom">Collections</h4>
+        </div>
+        <div class="uk-width-medium-1-2 uk-text-right" >
+            <!--<a href="#" class="md-btn md-btn-success " id="id_download">Download Excel</a>-->
+            {% if request.user.profile.is_union or request.user.profile.is_cooperative %}
+                 <a href="{% url 'coop:collection_create' %}" class="md-btn md-btn-success ">Add Collection</a>
+                 <a href="{% url 'coop:collection_upload' %}" class="md-btn md-btn-success ">Upload Collection</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <form class="" method="get">
+            <div class="uk-grid" data-uk-grid-margin>
+                {% for field in form %}
+                    <div class="uk-width-medium-1-5">
+                        {% include 'form/field.html' with field=field %}
+                        
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-medium-5 uk-right">
+                </div>
+                <div class="uk-width-medium-5 uk-float-right">
+                    <button class="md-btn" name="_search" > Search </button>
+                    <a href="." class="md-btn md-btn-small md-btn-flat md-btn-flat-primary  uk-margin-small-left"><i class="material-icons md-24 " title="Delete">refresh</i></a>
+                    <button class="md-btn md-btn-success uk-float-right" name="_download" value="download"> Export CSV </button>
+                    
+                    
+                </div>
+             </div>
+            </form>
+            <div class="uk-modal" id="modal_header_footer">
+                <div class="uk-modal-dialog">
+                    <div class="uk-modal-header">
+                        <h3 class="uk-modal-title">Message</h3>
+                    </div>
+                    <p>
+                        <textarea autofocus name="message" id="id_message" class="md-input"  onkeyup="countChar(this)" onKeyPress="countChar(this)" onKeyDown="countChar(this)"></textarea>
+                    </p>
+                     <div id="charNum"></div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button type="button" class="md-btn md-btn-flat uk-modal-close">Close</button>
+                        <button type="button" class="md-btn md-btn-flat md-btn-flat-primary" id="id_send_message">Send</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="uk-grid-divider">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="dt_tableTools" class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        
+                        <th>Collection Date</th>
+                        <th>Farmer</th>
+                        <th>Coop</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Update Date</th>
+                        <th>Created By</th>
+                        <!--<th></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.collection_date| date:"d, M Y" }}</td>
+                                <td {% if not item.is_member %} style="background-color: #F7D01D" {% endif %}>{% if item.is_member %}{{ item.member }}{% else %} {{ item.name }}{% endif %}</td>
+                                <td>{{ item.cooperative }}</td>
+                                <td>{{ item.product }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.total_price }}</td>
+                                <td>{{ item.update_date }}</td>
+                                <td>{{ item.created_by }}</td>
+                                <!--<td><a href="{% url 'activity:thamatic_edit' item.id %}" class="uk-float-right"><i class="md-icon material-icons">&#xE254;</i></a></td>-->
+                            </tr>
+                            
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+           
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- datatables -->
+    <script src="{% static 'bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
+    <!-- datatables colVis-->
+    <script src="{% static 'bower_components/datatables-colvis/js/dataTables.colVis.js' %}"></script>
+<!-- datatables tableTools-->
+    <script src="{% static 'bower_components/datatables-tabletools/js/dataTables.tableTools.js' %}"></script>
+    <!-- datatables custom integration -->
+    <script src="{% static 'assets/js/custom/datatables_uikit.min.js' %}"></script>
+
+    <!--  datatables functions -->
+    <script src="{% static 'assets/js/pages/plugins_datatables.min.js' %}"></script>
+    
+    <script>
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        
+        $('#id_download').on('click', function(){
+            
+            var csrftoken = getCookie('csrftoken');
+            //modal = UIkit.modal.blockUI('<div class=\'uk-text-center\'>Processing...</div>');
+            //modal
+            
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+            
+            $.ajax({
+                url: '{% url "coop:collection_download" %}',
+                //url: url,
+                dataType: 'json',
+                type: 'post',
+                contentType: 'application/csv',
+                data: JSON.stringify({
+                    'search': '',
+                    'csrfmiddlewaretoken': csrftoken
+                    }),
+                success: function( data, textStatus ){
+                    console.log("Data" + data)
+                    window.open('data:application/vnd.ms-excel,' + data);
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    //var res = jQuery.parseJSON(jqXhr);
+                     console.log("Error " + errorThrown)
+                     
+                }
+            })
+        });
+        
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+{% endblock %}

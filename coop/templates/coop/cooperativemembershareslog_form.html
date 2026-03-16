@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load my_custom_tags %}
+
+{% block style %}
+    <!-- additional styles for plugins -->
+     <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        .k-combobox{
+            width: 100% !important;
+        }
+    </style>
+    
+{% endblock %}
+{% block page_content %}
+<h3 class="heading_b uk-margin-bottom">Member Share Transaction</h3>
+   <div class="md-card">
+        <div class="md-card-content">
+            <form method="POST" class="new-event-form" role="role" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include "error_template.html" with form=form %}
+                <div class="uk-grid">
+                    <div class="uk-width-1-1" >
+                       {% include "form/field.html" with field=form.cooperative  input_group_add_on='<i class="uk-input-group-icon uk-icon-institution "></i>' %}
+                     <!--{# {%  include "form/field.html" with field=form.cooperative_member_old|htmlattributes:"css=''"  input_group_add_on='<i class="uk-input-group-icon uk-icon-user "></i>' %} #}-->
+                     {% include "form/field.html" with field=form.cooperative_member  input_group_add_on='<i class="uk-input-group-icon uk-icon-user "></i>' %}
+                      
+                    </div> 
+                </div>
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="uk-width-medium-1-2">
+                        
+                        
+                        <!--{% include "form/field.html" with field=form.transaction_date|htmlattributes:"data-uk-datepicker={format:'YYYY-MM-DD'}| class=md-input" input_group_add_on='<i class="uk-input-group-icon uk-icon-user"></i>' %}-->
+                        {% include "form/field.html" with field=form.transaction_date input_group_add_on='<i class="uk-input-group-icon uk-icon-user"></i>' %}
+                        {% include "form/field.html" with field=form.payment_method input_group_add_on='<i class="uk-input-group-icon uk-icon-money "></i>' %}
+                        {% include "form/field.html" with field=form.remark input_group_add_on='<i class="uk-input-group-icon uk-icon-pencil"></i>' %}
+                    </div>
+                    
+                    <div class="uk-width-medium-1-2">
+                        {% include "form/field.html" with field=form.amount input_group_add_on='<i class="uk-input-group-icon uk-icon-money "></i>' %}
+                        {% include "form/field.html" with field=form.shares_price input_group_add_on='<i class="uk-input-group-icon uk-icon-circle-o"></i>'  %}
+                        {% include "form/field.html" with field=form.shares input_group_add_on='<i class="uk-input-group-icon uk-icon-file-text"></i>'  %}
+                    </div>
+                </div>
+                <div class="uk-grid">
+                    <div class="uk-width-1-1">
+                        <button type="submit" class="md-btn md-btn-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+
+  <!-- inputmask-->
+    <script src="{% static 'bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js' %}"></script>
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <!--  dropify -->
+    <script src="{% static 'assets/js/custom/dropify/dist/js/dropify.min.js' %}"></script>
+
+    <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+    
+    <script>
+         UIkit.datepicker("#id_transaction_date", {maxDate:get_current_date(), format:'YYYY-MM-DD' });
+        
+        $("#id_transaction_date").attr("autocomplete", "off");
+        function get_current_date(){
+            var fullDate = new Date()
+            console.log(fullDate);
+            //Thu May 19 2011 17:25:38 GMT+1000 {}
+             
+            //convert month to 2 digits
+            var twoDigitMonth = ((fullDate.getMonth().length+1) === 1)? (fullDate.getMonth()+1) : (fullDate.getMonth()+1);
+             
+            var currentDate = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + (fullDate.getDate()+1);
+            console.log(currentDate);
+            return currentDate;
+         }
+        var share_value = 0;
+        $("#id_shares").addClass( " label-fixed " );
+        $("#id_amount").addClass( " label-fixed " );
+        var paid = $("#id_amount");
+        var share = $("#id_shares_price");
+        var bought = $("#id_shares");
+        share.on('input', function() {
+            share_value = $(this).val();
+            if(paid.val() !== ""){
+                var sb =  paid.val() / share_value;
+                bought.val(sb);
+            }
+        });
+        
+        paid.on('input', function() {
+            paid_value = $(this).val();
+            if(paid.val() !== ""){
+                var sb =  paid_value / share.val();
+                bought.val(sb);
+            }
+        });
+        
+        bought.on('input', function() {
+            bought_value = $(this).val();
+            if(bought.val() !== ""){
+                var sb =  bought_value * share.val();
+                paid.val(sb);
+            }
+        });
+        
+        //$('#id_cooperative_member').kendoComboBox({
+        //    filter: "contains",
+        //    suggest: true
+        //    });
+        $("#id_cooperative").change(function () {
+            var url = "{% url 'coop:ajax_load_members' %}"  // get the url of the `load_cities` view
+            var cooperative = $(this).val();  // get the selected country ID from the HTML input
+            console.log("GEt Menmber")
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'cooperative': cooperative       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_cooperative_member").html(data);  // replace the contents of the city input with the data that came from the server
+                    
+                }
+            });
+      
+        });
+    </script>
+    
+{% endblock %}

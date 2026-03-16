@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+{% load my_custom_tags %}
+{% load static %}
+
+
+{% block style %}
+    <!-- additional styles for plugins -->
+    <!-- dropify -->
+    <link rel="stylesheet" href="{% static 'assets/skins/dropify/css/dropify.css' %}">
+    <!-- additional styles for plugins -->
+    <!-- kendo UI -->
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.common-material.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bower_components/kendo-ui/styles/kendo.material.min.css' %}"/>
+    <style>
+        #id_common_animal_deseases{height: auto !important; min-height: 0px !important;}
+    </style>
+{% endblock %}
+{% block page_content %}
+<h3 class="heading_b uk-margin-bottom">Member Form</h3>
+   <div class="md-card">
+        <div class="md-card-content">
+            <form method="POST" class="uk-form-stacked" id="wizard_advanced_form" role="role" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div id="wizard_advanced" data-uk-observe>
+                    <!-- first section -->
+                    <h3>Member Information</h3>
+                    <section>
+                        <!--<h2 class="heading_a">-->
+                        <!--    Member Information-->
+                        <!--</h2>-->
+                        <hr class="md-hr"/>
+                        {% if error %}
+                             <div class="uk-alert uk-alert-danger" data-uk-alert="">
+                                <a href="#" class="uk-alert-close uk-close"></a>
+                                {{ error }}
+                            </div>
+                        {% endif %}
+                        {% if form.errors %}
+                            {% if form.non_field_errors %}
+                                <div class="uk-alert uk-alert-danger" data-uk-alert="">
+                                    <a href="#" class="uk-alert-close uk-close"></a>
+                                    {{ form.non_field_errors }}
+                                </div>
+                            {% endif %}
+                            <div class="uk-alert uk-alert-danger" data-uk-alert="">
+                                <a href="#" class="uk-alert-close uk-close"></a>
+                                {{ form.errors }}
+                            </div>
+                            <p class="text-red"><i class="fa fa-fw fa-times-circle-o"></i></p>
+                        {% endif %}
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.image  %}
+                            </div>
+                            
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-1-1 parsley-row">
+                                {% include "form/field.html" with field=form.cooperative  input_group_add_on='<i class="uk-input-group-icon uk-icon-building"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-1-1 parsley-row">
+                                {% include "form/field.html" with field=form.farmer_group  input_group_add_on='<i class="uk-input-group-icon uk-icon-building"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid">
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.surname input_group_add_on='<i class="uk-input-group-icon uk-icon-user"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.first_name input_group_add_on='<i class="uk-input-group-icon uk-icon-user"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.other_name input_group_add_on='<i class="uk-input-group-icon uk-icon-user"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.date_of_birth input_group_add_on='<i class="uk-input-group-icon uk-icon-calendar"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.gender input_group_add_on='<i class="uk-input-group-icon uk-icon-transgender"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.clan input_group_add_on='<i class="uk-input-group-icon uk-icon-genderless "></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-4 parsley-row">
+                                {% include "form/field.html" with field=form.maritual_status input_group_add_on='<i class="uk-input-group-icon uk-icon-genderless "></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-4 parsley-row">
+                                {% include "form/field.html" with field=form.is_refugee input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-4 parsley-row">
+                                {% include "form/field.html" with field=form.is_handicap input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                            </div>
+
+                         </div>
+                            <div class="uk-grid" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-3 parsley-row">
+                                    {% include "form/field.html" with field=form.id_type input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                                </div>
+                                <div class="uk-width-medium-1-3 parsley-row">
+                                    {% include "form/field.html" with field=form.id_number input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                                </div>
+
+                             </div>
+                         <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.phone_number input_group_add_on='<i class="uk-input-group-icon uk-icon-phone"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.other_phone_number input_group_add_on='<i class="uk-input-group-icon uk-icon-mobile-phone"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.email input_group_add_on='<i class="uk-input-group-icon uk-icon-envelope-o"></i>' %}
+                            </div>
+                         </div>
+
+                        <div class="uk-grid" data-uk-grid-margin>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div class="uk-width-medium-1-3 parsley-row">
+
+                                {% include "form/field.html" with field=form.own_phone input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.has_mobile_money input_group_add_on='<i class="uk-input-group-icon uk-icon-person"></i>' %}
+                            </div>
+
+                         </div>
+
+                         <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.coop_role input_group_add_on='<i class="uk-input-group-icon uk-icon-user-plus"></i>' %}
+                            </div>
+                             
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.address input_group_add_on='<i class="uk-input-group-icon uk-icon-map-signs"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.district input_group_add_on='<i class="uk-input-group-icon uk-icon-map-o"></i>' %}
+                            </div>
+                        </div>
+<!--                        <div class="uk-grid" data-uk-grid-margin>-->
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.app_id input_group_add_on='<i class="uk-input-group-icon uk-icon-user-plus"></i>' %}-->
+<!--                            </div>-->
+
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.cpk_rid input_group_add_on='<i class="uk-input-group-icon uk-icon-map-signs"></i>' %}-->
+<!--                            </div>-->
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.passcode input_group_add_on='<i class="uk-input-group-icon uk-icon-map-o"></i>' %}-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="uk-grid" data-uk-grid-margin>
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.consent_id input_group_add_on='<i class="uk-input-group-icon uk-icon-user-plus"></i>' %}-->
+<!--                            </div>-->
+
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.consumer_device_id input_group_add_on='<i class="uk-input-group-icon uk-icon-map-signs"></i>' %}-->
+<!--                            </div>-->
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.gps_coodinates input_group_add_on='<i class="uk-input-group-icon uk-icon-map-o"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.create_wallet input_group_add_on='<i class="uk-input-group-icon uk-icon-user-plus"></i>' %}
+                            </div>
+
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.has_flexipay input_group_add_on='<i class="uk-input-group-icon uk-icon-map-signs"></i>' %}
+                            </div>
+
+                        </div>
+
+                        <div class="uk-grid" data-uk-grid-margin>
+                            
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.county input_group_add_on='<i class="uk-input-group-icon uk-icon-map-marker"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.sub_county input_group_add_on='<i class="uk-input-group-icon uk-icon-map-marker"></i>' %}
+                            </div>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.village input_group_add_on='<i class="uk-input-group-icon uk-icon-map-marker"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin>
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.land_acreage input_group_add_on='<i class="uk-input-group-icon uk-icon-child"></i>' %}
+                            </div>
+<!--                            <div class="uk-width-medium-1-3 parsley-row">-->
+<!--                                {% include "form/field.html" with field=form.chia_trees input_group_add_on='<i class="uk-input-group-icon uk-icon-child"></i>' %}-->
+<!--                            </div>-->
+                            <div class="uk-width-medium-1-3 parsley-row">
+                                {% include "form/field.html" with field=form.product input_group_add_on='<i class="uk-input-group-icon uk-icon-child"></i>' %}
+                            </div>
+                        </div>
+                        <div class="uk-grid" data-uk-grid-margin>
+                        </div>
+                         <div class="uk-grid" data-uk-grid-margin>
+                         </div>
+                        
+                    </section>
+                    <section>
+                    <div class="uk-width-1-1">
+                       <button type="submit" class="md-btn md-btn-success">Save</button>
+                    </div>
+                   </section>
+                    
+                  
+                </div>
+                
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    <!-- ionrangeslider -->
+    <script src="{% static 'bower_components/ion.rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <!--<!-- htmleditor (codeMirror) -->
+    <!--<script src="{% static 'assets/js/uikit_htmleditor_custom.min.js '%}"></script>-->
+    <!-- inputmask-->
+    <!--<script src="{% static 'bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js' %}"></script>-->-->
+     <!-- page specific plugins -->
+    <!-- parsley (validation) -->
+    
+    <!--  forms advanced functions -->
+    <script src="{% static 'assets/js/pages/forms_advanced.min.js' %}"></script>
+    
+    <!--  dropify -->
+    <script src="{% static 'assets/js/custom/dropify/dist/js/dropify.min.js' %}"></script>
+
+    <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    <script>
+        $(function() {
+            
+        });
+    </script>
+    <script>
+    // load parsley config (altair_admin_common.js)
+    altair_forms.parsley_validation_config();
+    // load extra validators
+    altair_forms.parsley_extra_validators();
+    </script>
+    <script src="{% static 'bower_components/parsleyjs/dist/parsley.min.js' %}"></script>
+    <!--<!-- jquery steps -->-->
+    <!--<script src="{% static 'assets/js/custom/wizard_steps.min.js' %}"></script>-->
+    <!---->
+    <!--<!--  forms wizard functions -->
+    <!--<script src="{% static 'assets/js/pages/forms_wizard.min.js' %}"></script>-->
+    
+    <script src="{% static 'bower_components/jquery.formset.js' %}"></script>
+    
+    <!-- kendo UI -->
+    <script src="{% static 'assets/js/kendoui_custom.min.js' %}"></script>
+
+    <!--  kendoui functions -->
+    <script src="{% static 'assets/js/pages/kendoui.min.js' %}"></script>
+    
+       <!--  form file input functions -->
+    <script src="{% static 'assets/js/pages/forms_file_input.min.js' %}"></script>
+    
+    
+     <script>
+        //$('.link-formset').formset({
+        //    addText: 'add + ',
+        //    deleteText: 'remove -',
+        //    prefix : 'product_quantity'
+        //});
+           
+        $("#id_common_diseases").selectize({
+            plugins:{remove_button:{label:""}},
+            //maxItems:null,
+            //valueField:"id",
+            //labelField:"title",
+            //searchField:"title",
+            //create:!1,
+            //render:{option:function(t,e){return'<div class="option"><span class="title">'+e(t.title)+"</span></div>"},item:function(t,e){return'<div class="item"><a href="'+e(t.url)+'" target="_blank">'+e(t.title)+"</a></div>"}},
+            onDropdownOpen:function(t){t.hide().velocity("slideDown",{begin:function(){t.css({"margin-top":"0"})},duration:200,easing:easing_swiftOut})},
+            onDropdownClose:function(t){t.show().velocity("slideUp",{complete:function(){t.css({"margin-top":""})},duration:200,easing:easing_swiftOut})}
+        })
+        
+        
+        $("#id_probable_sell_month").selectize({
+            plugins:{remove_button:{label:""}},
+            //maxItems:null,
+            //valueField:"id",
+            //labelField:"title",
+            //searchField:"title",
+            create:!1,
+            //render:{option:function(t,e){return'<div class="option"><span class="title">'+e(t.title)+"</span></div>"},item:function(t,e){return'<div class="item"><a href="'+e(t.url)+'" target="_blank">'+e(t.title)+"</a></div>"}},
+            onDropdownOpen:function(t){t.hide().velocity("slideDown",{begin:function(){t.css({"margin-top":"0"})},duration:200,easing:easing_swiftOut})},
+            onDropdownClose:function(t){t.show().velocity("slideUp",{complete:function(){t.css({"margin-top":""})},duration:200,easing:easing_swiftOut})}
+        })
+        
+       
+      
+        $("#id_date_of_birth").kendoDatePicker({
+            format: "yyyy-MM-dd",
+         });
+        
+        $('#id_tick_control').kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+              { text: "Spray", value: "Spray" },
+              { text: "Dip", value: "Dip" },
+              { text: "", value: "" }
+            ],
+            filter: "contains",
+            suggest: true,
+            index: 3
+          });
+        $('#id_animal_identification').kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [
+              { text: "Ear Tags", value: "Ear Tags" },
+              { text: "Branding", value: "Branding" },
+              { text: "", value: "" }
+            ],
+            filter: "contains",
+            suggest: true,
+            index: 3
+          });
+        
+        
+        var animal_count = $('#id_animal_count');
+        var adult = $('#id_adults');
+        var bullock = $('#id_bullocks');
+        var calves = $('#id_calves');
+        
+        var f_adult = $('#id_f_adults');
+        var heifer = $('#id_heifers');
+        var f_calves = $('#id_f_calves');
+
+        
+        $('#id_adults, #id_bullocks, #id_calves, #id_f_adults, #id_heifers, #id_f_calves').on('input', function(){
+            var t = sum_of_animals();
+            console.log("INPUT")
+            animal_count.val(t);
+        })
+        
+        function sum_of_animals() {
+            var total = parseInt(adult.val())+parseInt(bullock.val())+parseInt(calves.val())+parseInt(f_adult.val())+parseInt(heifer.val())+parseInt(f_calves.val());
+            return total
+        }
+        //$("#id_village").empty();
+        $("#id_sub_county").change(function () {
+            var url = "{% url 'coop:ajax_load_village' %}"  // get the url of the `load_cities` view
+            var sub_county = $(this).val();  // get the selected country ID from the HTML input
+      
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'sub_county': sub_county       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_parish").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+      
+        });
+        //$('#id_village').kendoComboBox();
+    
+    </script>
+{% endblock %}

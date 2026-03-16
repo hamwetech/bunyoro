@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load my_custom_tags %}
+
+{% block page_content %}
+
+<div class="uk-width-medium-8-10 uk-container-center reset-print">
+<div class="uk-width-large-7-10 uk-row-first">
+<div class="md-card md-card-single main-print" id="invoice" style="opacity: 1; transform: scale(1);">
+    <div id="invoice_preview">
+        <div class="md-card-toolbar">
+            <div class="md-card-toolbar-actions hidden-print">
+                <i class="md-icon material-icons" id="invoice_print"></i>
+                <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}">
+                    <i class="md-icon material-icons"></i>
+                    <div class="uk-dropdown uk-dropdown-small">
+                        <ul class="uk-nav">
+                            <!--<li><a href="#">Archive</a></li>-->
+                            <!--<li><a href="#" class="uk-text-danger">Remove</a></li>-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <h3 class="md-card-toolbar-heading-text large" id="invoice_name">
+                Reference {{ object.reference}}
+            </h3>
+        </div>
+        <div class="md-card-content" style="">
+            <div class="uk-margin-medium-bottom">
+                <span class="uk-text-muted uk-text-small uk-text-italic">Date:</span> {{object.order_date}}
+                <br>
+                <!--<span class="uk-text-muted uk-text-small uk-text-italic">Due Date:</span> 02.01.2019-->
+            </div>
+            <div class="uk-grid uk-margin-large-bottom">
+                <div class="uk-width-1-1">
+                    <table class="uk-table">
+                        <tbody>
+                        <tr class="uk-table-middle">
+                            <td>Reference</td><td>{{ object.refernce }}</td>
+                        </tr>
+                        <tr>
+                            <td>Member Name</td><td>{{ object.member }}</td>
+                            </tr>
+                         <tr>
+                            <td>Member National ID</td><td>{{ object.member.id_number }}</td>
+                            </tr>
+                        <tr>
+                            <td>Member Phone Number</td><td>{{ object.member.phone_number }}</td>
+                            </tr>
+                        <tr>
+                            <td>Cooperative</td><td>{{ object.member.cooperative }}</td>
+                            </tr>
+                         <tr>
+                            <td>Supplier</td><td>{{ object.order_item.item.supplier }}</td>
+                            </tr>
+                        <tr>
+                            <td>Request Date</td><td>{{ object.request_date }}</td>
+                            </tr>
+                        <tr>
+                            <td>Status</td><td>{{ object.status }}</td>
+                            </tr>
+
+                        <tr>
+                            <td>Amount</td><td>{{ object.requested_amount|intcomma }}</td>
+                            </tr>
+                        <tr>
+                            <td>Provider Id</td><td>{{ object.loan_request_id }}</td>
+                            </tr>
+                        <tr>
+                            <td>Response</td><td>{{ object.response|safe }}</td>
+                            </tr>
+
+                    </table>
+                    <div class="buttons uk-text-right">
+                        <a href="{% url 'credit:loan_approve' pk=object.id status='STATUS' %}" class="md-btn md-btn-wave waves-effect waves-button md-btn-success">Check Status</a>
+                        {% if request.user.profile.is_credit_manager %}
+                        <a href="{% url 'credit:loan_approve' pk=object.id status='APPROVED' %}" class="md-btn md-btn-wave waves-effect waves-button md-btn-success">APPROVE</a>
+                        <a href="{% url 'credit:loan_approve' pk=object.id status='REJECTED' %}" class="md-btn md-btn-wave waves-effect waves-button md-btn-danger">REJECT</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="invoice_form"></div>
+</div>
+</div>
+
+</div>
+
+
+
+{% endblock %}

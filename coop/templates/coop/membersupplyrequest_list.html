@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+{% load el_pagination_tags %}
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Supply Requests</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            {% if request.user.profile.is_cooperative %}
+                <a href="{% url 'coop:request_create' %}" class="md-btn md-btn-success uk-float-right">Add Supply Request</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        
+                        <th>Reference</th>
+                        <th>Member</th>
+                        <th>Total Animals</th>
+                        <th>Supply Date</th>
+                        <th>Status</th>
+                        <th>Update Date</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% paginate object_list %}{% get_pages %}
+                        {% for item in object_list %}
+                            <tr>
+                               
+                                <td>{{ item.transaction_reference }}</td>
+                                <td>{{ item.cooperative_member }}</td>
+                                <td>{{ item.get_sum_total }}</td>
+                                <td>{{ item.supply_date }}</td>
+                                <td>{% include 'status_text.html' with field=item.status %}</td>
+                                <td>{{ item.update_date }} </td>
+                                <td>
+                                    {% if request.user.profile.is_cooperative %}
+                                        <a href="{% url 'coop:request_create' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Edit</a>
+                                    {% endif %}
+                                    {% if request.user.profile.is_partner %}
+                                        <a href="{% url 'coop:request_detail' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Detail</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row-pagination">
+                Showing entries
+                {{ pages.current_start_index }}-{{ pages.current_end_index }} of
+                {{ pages.total_count }}.
+                {# Just print pages to render the Digg-style pagination. #}
+                {% show_pages %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}

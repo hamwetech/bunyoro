@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %} 
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Device List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            {% if request.user.is_superuser %}
+                <a href="{% url 'profile:device_create' %}" class="md-btn md-btn-success uk-float-right">Add Device</a>
+                <a href="{% url 'profile:device_bulk_create' %}" class="md-btn md-btn-default uk-float-right">Bulk Add Device</a>
+            {% endif %}
+            <a href="{% url 'profile:device_map' %}" class="md-btn md-btn-default uk-float-right">Device Location</a>
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table id="dt_tableTools" class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Incharge</th>
+                        <th>Assigned To</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.device_id }}</td>
+                                <td>{{ item.in_charge.get_full_name|default:"" }}</td>
+                                <td>{{ item.assigned_to.get_full_name|default:"" }}</td>
+
+                                <td>
+                                    {% if request.user.is_superuser %}
+                                        <a href="{% url 'profile:device_edit' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">Edit</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_specific_scripts %}
+ <!-- datatables -->
+    <script src="{% static 'bower_components/datatables/media/js/jquery.dataTables.min.js' %}"></script>
+    <!-- datatables colVis-->
+    <script src="{% static 'bower_components/datatables-colvis/js/dataTables.colVis.js' %}"></script>
+<!-- datatables tableTools-->
+    <script src="{% static 'bower_components/datatables-tabletools/js/dataTables.tableTools.js' %}"></script>
+    <!-- datatables custom integration -->
+    <script src="{% static 'assets/js/custom/datatables_uikit.min.js' %}"></script>
+
+    <!--  datatables functions -->
+    <script src="{% static 'assets/js/pages/plugins_datatables.min.js' %}"></script>
+{% endblock %}

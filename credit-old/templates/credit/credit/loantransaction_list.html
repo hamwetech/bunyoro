@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load material_form %}
+
+{% block page_content %}
+    <div class="uk-grid" data-uk-grid-margin>
+        <div class="uk-width-medium-1-2">
+            <h2 class="heading_a uk-margin-bottom">Loan Transactions List</h2>
+        </div>
+        <div class="uk-width-medium-1-2">
+            
+<!--           <a href="{% url 'credit:cm_create' %}" class="md-btn md-btn-success uk-float-right">Add Credit Manager</a>-->
+
+        </div>
+    </div>
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-content">
+            <div class="uk-overflow-container">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Member</th>
+                        <th>Cooperative</th>
+                        <th>Amount</th>
+                        <th>Transaction Type</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.reference }}</td>
+                                <td>{{ item.member }}</td>
+                                <td>{{ item.member.cooperative }}</td>
+                                <td>{{ item.amount|intcomma }}</td>
+                                <td>{{ item.transaction_type }}</td>
+                                <td>{{ item.create_date }}</td>
+                                <td>
+                                    <a href="{% url 'credit:loan_detail' item.id %}" class="md-btn md-btn-wave waves-effect waves-button uk-float-right">OPEN</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block page_specific_scripts %}
+ <!-- page specific plugins -->
+    
+    <script>
+        $(function() {
+            $(function() {
+            // enable hires images
+            altair_helpers.retina_images();
+            // fastClick (touch devices)
+            if(Modernizr.touch) {
+                FastClick.attach(document.body);
+            }
+        });
+        });
+    </script>
+{% endblock %}
