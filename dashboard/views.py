@@ -26,6 +26,7 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         cooperatives = Cooperative.objects.all()
+        clans = Clan.objects.all()
         members = CooperativeMember.objects.all()
         suppliers = Supplier.objects.all()
         orders = MemberOrder.objects.all()
@@ -91,6 +92,7 @@ class DashboardView(TemplateView):
                                                                   total_shares=Sum('shares_bought'),
                                                                   transaction_date=Max('transaction_date')).order_by('-transaction_date')
 
+        context['clans'] = clans.count()
         context['cooperatives'] = cooperatives.count()
         context['suppliers'] = suppliers.count()
         context['orders'] = orders.count()

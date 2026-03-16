@@ -30,6 +30,9 @@ class Clan(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def members(self):
+        return CooperativeMember.objects.filter(clan=self).count()
 
 class Cooperative(models.Model):
     name = models.CharField(max_length=150, unique=True)
