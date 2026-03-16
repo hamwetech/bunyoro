@@ -19,6 +19,7 @@ from conf.utils import generate_numeric
 
 class Clan(models.Model):
     name = models.CharField(max_length=150, unique=True)
+    totem = models.CharField(max_length=255, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)

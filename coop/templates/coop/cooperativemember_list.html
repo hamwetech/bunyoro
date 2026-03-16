@@ -100,7 +100,7 @@
                         <th>Card Number ID</th>
                         <th>Phone Number</th>
                         <th>Gender</th>
-                        <th>Cooperative</th>
+                        <th>Clan</th>
                         <th>District</th>
                         <th>Sub County</th>
                         <th>Created By</th>
@@ -118,10 +118,10 @@
                                     <small><img src="{% static 'assets/img/tiv.jpeg' %}" width="15"></small>
                                     {% endif %}
                                 </td>
-                                <td>{{ item.consumer_device_id|default:"Not Carded" }} <br> <small>{{ item.member_id }}</small></td>
+                                <td>{{ item.member_id }}</td>
                                 <td>{{ item.phone_number }}</td>
                                 <td>{{ item.gender }}</td>
-                                <td>{{ item.cooperative  }} <br><small>FG:</small>{{ item.farmer_group  }}</td>
+                                <td>{{ item.clan  }} <br></td>
                                 <td>{{ item.district|default:'' }} </td>
                                 <td>{{ item.sub_county|default:'' }} </td>
                                 <td>{{ item.create_by.username}} </td>

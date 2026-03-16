@@ -18,7 +18,8 @@ from coop.models import Cooperative, CooperativeContribution, CooperativeShareTr
     AnimalIdentification, TickControl, CooperativeSharePrice, CommonDisease, FarmerGroup, CooperativeRegistrationFee, \
     Clan
 from coop.forms import CooperativeForm, CooperativeContributionForm, CooperativeShareTransactionForm, AnimalIdentificationForm,\
-CooperativeSharePriceForm, CooperativeUploadForm, CommonDiseasesForm, FarmerGroupForm, CooperativeRegistrationFeeForm, ClanForm
+CooperativeSharePriceForm, CooperativeUploadForm, CommonDiseasesForm, FarmerGroupForm, CooperativeRegistrationFeeForm, ClanForm, \
+ClanUploadForm
 
 class ExtraContext(object):
     extra_context = {}
@@ -30,6 +31,89 @@ class ExtraContext(object):
 
 def animal_identification(request):
     pass
+
+
+class ClanUploadView(View):
+    template_name = 'coop/collection_upload.html'
+
+    def get(self, request, *arg, **kwargs):
+        data = dict()
+        data['form'] = ClanUploadForm
+        return render(request, self.template_name, data)
+
+    def post(self, request, *args, **kwargs):
+        data = dict()
+        form = ClanUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['excel_file']
+
+            path = f.temporary_file_path()
+            index = int(form.cleaned_data['sheet']) - 1
+            startrow = int(form.cleaned_data['row']) - 1
+            name_col = int(form.cleaned_data['name_col'])
+            totem_col = int(form.cleaned_data['totem_col'])
+
+            book = xlrd.open_workbook(filename=path, logfile='/tmp/xls.log')
+            sheet = book.sheet_by_index(index)
+            rownum = 0
+            data = dict()
+            clan_list = []
+            for i in range(startrow, sheet.nrows):
+                try:
+                    row = sheet.row(i)
+                    rownum = i + 1
+                    name = smart_str(row[name_col].value).strip()
+
+                    if not re.search('^[A-Z\s\(\)\-\.]+$', name, re.IGNORECASE):
+                        data['errors'] = '"%s" is not a valid Name (row %d)' % \
+                                         (name, i + 1)
+                        return render(request, self.template_name, {'active': 'system', 'form': form, 'error': data})
+
+
+                    totem = smart_str(row[totem_col].value).strip()
+                    if isinstance(totem, str):
+                        totem = totem.decode('utf-8', 'ignore')
+
+                    totem = totem.encode('ascii', 'ignore')
+                    if totem:
+
+                        print(totem)
+                        if not re.search('^[A-Z\s\(\)\-\.\,\/]+$', totem, re.IGNORECASE):
+                            data['errors'] = '"%s" is not a valid Totem (row %d)' % \
+                                             (totem, i + 1)
+                            return render(request, self.template_name,
+                                          {'active': 'system', 'form': form, 'error': data})
+
+                    q = {'name': name, 'totem': totem}
+                    clan_list.append(q)
+
+                except Exception as err:
+                    log_error()
+                    return render(request, self.template_name, {'active': 'setting', 'form': form, 'error': err})
+            if clan_list:
+                with transaction.atomic():
+                    try:
+                        do = None
+                        sco = None
+                        for c in clan_list:
+                            name = c.get('name')
+                            totem = c.get('totem')
+
+                            if not Clan.objects.filter(name=name).exists():
+
+                                Clan(
+                                    name=name,
+                                    totem=totem,
+                                    created_by=self.request.user
+                                ).save()
+
+                        return redirect('coop:clan-list')
+                    except Exception as err:
+                        log_error()
+                        data['error'] = err
+
+        data['form'] = form
+        return render(request, self.template_name, data)
 
 
 class ClanListView(ListView):

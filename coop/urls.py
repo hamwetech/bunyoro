@@ -108,6 +108,7 @@ urlpatterns = [
 
      url(r'clan/delete/(?P<pk>[\w]+)/$', ClanDeleteView.as_view(), name='clan-delete'),
      url(r'clan/edit/(?P<pk>[\w]+)/$', ClanUpdateView.as_view(), name='clan-edit'),
+     url(r'clan/upload/$', ClanUploadView.as_view(), name='clan-upload'),
      url(r'clan/create/$', ClanCreateView.as_view(), name='clan-create'),
      url(r'clan/list/$', ClanListView.as_view(), name='clan-list'),
 

@@ -10,6 +10,7 @@
         <div class="uk-width-medium-1-2">
 
            <a href="{% url 'coop:clan-create' %}" class="md-btn md-btn-primary uk-float-right">Add Clan</a>
+           <a href="{% url 'coop:clan-upload' %}" class="md-btn md-btn-primary uk-float-right">Upload Clan</a>
 
         </div>
     </div>
@@ -20,6 +21,7 @@
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Totem</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -28,6 +30,7 @@
                             <tr>
 
                                 <td>{{ item.name }}</td>
+                                <td>{{ item.totem }}</td>
                                 <td class="uk-text-nowrap uk-text-right">
                                    <a href=""><i class="material-icons md-24 uk-text-primary"  title="Detail">remove_red_eye</i></a>
 
